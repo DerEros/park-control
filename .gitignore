@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Local compiler settings
+compile_commands.json
