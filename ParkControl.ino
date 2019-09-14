@@ -1,4 +1,5 @@
 #include "libraries/Arduino-Log/ArduinoLog.h"
+#include "libraries/Adafruit_NeoPixel/Adafruit_NeoPixel.h"
 
 void setup() {
     Serial.begin(9600);
