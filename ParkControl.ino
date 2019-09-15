@@ -1,7 +1,12 @@
 #include "libraries/Arduino-Log/ArduinoLog.h"
 #include "libraries/Adafruit_NeoPixel/Adafruit_NeoPixel.h"
 
+#include "AnimationBuilders/DefaultAnimationBuilder.h"
+#include "Animations/AnimationRenderer.h"
+
 Adafruit_NeoPixel pixels(8, D1, NEO_GRB + NEO_KHZ800);
+AnimationRenderer<uint32_t> *renderer;
+unsigned int previousMillis = 0;
 
 void setup() {
     Serial.begin(9600);
@@ -11,23 +16,21 @@ void setup() {
 
     Log.verbose("Activating Pixels");
     pixels.begin();
+
+    DefaultAnimationBuilder *animationBuilder = new DefaultAnimationBuilder();
+    renderer = new AnimationRenderer<uint32_t>(*(animationBuilder->getAnimation()), pixels);
+
+    previousMillis = millis();
 }
 
-int offset = 0;
 void loop() {
     Log.verbose("Main loop starting");
 
-    for (int i = 0; i < 8; i++) {
-        if ((i + offset) % 3 == 0) {
-            pixels.setPixelColor(i, 0x0000FF00);
-        } else {
-            pixels.setPixelColor(i, 0);
-        }
-    } 
+    unsigned int currentTime = millis();
+    unsigned int deltaTimeMs = currentTime - previousMillis;
+    previousMillis = currentTime;
 
-    pixels.show();
+    renderer->render(deltaTimeMs);
 
-    if (offset++ > 3) offset = 0;
-
-    delay(200);
+    delay(2);
 }
