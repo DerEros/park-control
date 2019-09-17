@@ -1,12 +1,17 @@
 #include "libraries/Arduino-Log/ArduinoLog.h"
-#include "libraries/Adafruit_NeoPixel/Adafruit_NeoPixel.h"
+
+#define FASTLED_ESP8266_NODEMCU_PIN_ORDER
+#include "libraries/FastLED/FastLED.h"
+
+#define PIN_LED D1
 
 #include "AnimationBuilders/DefaultAnimationBuilder.h"
 #include "Animations/AnimationRenderer.h"
 
-Adafruit_NeoPixel pixels(8, D1, NEO_GRB + NEO_KHZ800);
+const unsigned int NUM_PIXELS = 8;
 AnimationRenderer<uint32_t> *renderer;
 unsigned int previousMillis = 0;
+CRGB leds[NUM_PIXELS];
 
 void setup() {
     Serial.begin(9600);
@@ -15,10 +20,10 @@ void setup() {
     Log.notice("Park Control - starting");
 
     Log.verbose("Activating Pixels");
-    pixels.begin();
+    FastLED.addLeds<NEOPIXEL, PIN_LED>(leds, NUM_PIXELS);
 
     DefaultAnimationBuilder *animationBuilder = new DefaultAnimationBuilder();
-    renderer = new AnimationRenderer<uint32_t>(*(animationBuilder->getAnimation()), pixels);
+    renderer = new AnimationRenderer<uint32_t>(*(animationBuilder->getAnimation()), leds);
 
     previousMillis = millis();
 }
