@@ -4,7 +4,7 @@
 #include "../Animations/BlinkAnimation.h"
 
 IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
-    MinimalPixelPattern<Pixel> *patternOn = new MinimalPixelPattern<Pixel>(0x00FF0000);
+    MinimalPixelPattern<Pixel> *patternOn = new MinimalPixelPattern<Pixel>(0x00FFDD00);
     MinimalPixelPattern<Pixel> *patternOff = new MinimalPixelPattern<Pixel>(0x000000FF);
     
     BlinkAnimation<Pixel> *animation = new BlinkAnimation<Pixel>(

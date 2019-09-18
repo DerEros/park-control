@@ -3,7 +3,7 @@
 #define FASTLED_ESP8266_NODEMCU_PIN_ORDER
 #include "libraries/FastLED/FastLED.h"
 
-#define PIN_LED D1
+#define PIN_LED 1
 
 #include "AnimationBuilders/DefaultAnimationBuilder.h"
 #include "Animations/AnimationRenderer.h"
