@@ -167,6 +167,15 @@
     (add_net VCC)
   )
 
+  (net_class "4A Traces" ""
+    (clearance 0.2)
+    (trace_width 2.1)
+    (via_dia 0.8)
+    (via_drill 0.4)
+    (uvia_dia 0.3)
+    (uvia_drill 0.1)
+  )
+
   (module Connector_PinHeader_1.00mm:PinHeader_1x04_P1.00mm_Vertical (layer F.Cu) (tedit 59FED738) (tstamp 5D8BD99C)
     (at 131.16 111.76)
     (descr "Through hole straight pin header, 1x04, 1.00mm pitch, single row")
