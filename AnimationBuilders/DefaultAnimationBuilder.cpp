@@ -8,7 +8,7 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
     MinimalPixelPattern<Pixel> *patternOff = new MinimalPixelPattern<Pixel>(0x000000FF);
     
     BlinkAnimation<Pixel> *animation = new BlinkAnimation<Pixel>(
-            PixelRange(0, 7),
+            PixelRange(0, 8),
             4,
             *patternOn,
             *patternOff
