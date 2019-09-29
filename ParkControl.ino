@@ -3,9 +3,7 @@
 #define FASTLED_ESP8266_NODEMCU_PIN_ORDER
 #include "libraries/FastLED/FastLED.h"
 
-#define PIN_LED 1
-#define PIN_ENABLE_LOGIC_SHIFTER 3
-
+#include "Pins.h"
 #include "AnimationBuilders/DefaultAnimationBuilder.h"
 #include "Animations/AnimationRenderer.h"
 
@@ -21,7 +19,7 @@ void setup() {
     Log.notice("Park Control - starting");
 
     Log.verbose("Activating Pixels");
-    FastLED.addLeds<NEOPIXEL, PIN_LED>(leds, NUM_PIXELS);
+    FastLED.addLeds<NEOPIXEL, PIN_LED_1>(leds, NUM_PIXELS);
 
     DefaultAnimationBuilder *animationBuilder = new DefaultAnimationBuilder();
     renderer = new AnimationRenderer<uint32_t>(*(animationBuilder->getAnimation()), leds);
