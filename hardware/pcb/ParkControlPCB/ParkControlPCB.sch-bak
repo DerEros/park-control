@@ -436,12 +436,8 @@ Wire Wire Line
 	5550 3300 5350 3300
 Text Label 5400 3300 0    50   ~ 0
 3V3
-Wire Wire Line
-	7200 3400 7450 3400
 Text Label 7200 3200 0    50   ~ 0
 LED_1
-Text Label 7200 3400 0    50   ~ 0
-LED_2
 Wire Wire Line
 	7200 3200 7450 3200
 Wire Wire Line
@@ -509,28 +505,6 @@ NoConn ~ 6000 3500
 NoConn ~ 6000 4000
 Wire Wire Line
 	7200 3900 7450 3900
-Wire Wire Line
-	7200 4100 7450 4100
-Text Label 7200 3900 0    50   ~ 0
-US_T_3
-Text Label 7200 4100 0    50   ~ 0
-US_E_3
-Wire Wire Line
-	8900 3850 8550 3850
-Wire Wire Line
-	8900 3950 8550 3950
-Text Label 8550 3850 0    50   ~ 0
-US_T_3
-Text Label 8550 3950 0    50   ~ 0
-US_E_3
-Wire Wire Line
-	9700 3850 10000 3850
-Wire Wire Line
-	9700 3950 10000 3950
-Text Label 9750 3850 0    50   ~ 0
-US_T_3_5V
-Text Label 9750 3950 0    50   ~ 0
-US_E_3_5V
 Wire Notes Line
 	4300 2350 500  2350
 Wire Notes Line
@@ -591,39 +565,40 @@ Text Label 2050 2950 0    50   ~ 0
 US_T_2_5V
 Text Label 2050 3050 0    50   ~ 0
 US_E_2_5V
-$Comp
-L Connector:Conn_01x04_Male J7
-U 1 1 5D94C2AD
-P 2800 2950
-F 0 "J7" H 2908 3231 50  0000 C CNN
-F 1 "US3" H 2908 3140 50  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x04_P1.00mm_Vertical" H 2800 2950 50  0001 C CNN
-F 3 "~" H 2800 2950 50  0001 C CNN
-	1    2800 2950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3000 2850 3450 2850
-Wire Wire Line
-	3000 3150 3450 3150
-Wire Wire Line
-	3000 2950 3450 2950
-Wire Wire Line
-	3000 3050 3450 3050
-Text Label 3150 2850 0    50   ~ 0
-VCC
-Text Label 3150 3150 0    50   ~ 0
-GND
-Text Label 3150 2950 0    50   ~ 0
-US_T_3_5V
-Text Label 3150 3050 0    50   ~ 0
-US_E_3_5V
-Wire Wire Line
-	6000 3900 5750 3900
-Text Label 5750 3900 0    50   ~ 0
-OE
 Wire Wire Line
 	8900 3150 8550 3150
 Text Label 8550 3150 0    50   ~ 0
+OE
+NoConn ~ 6000 3900
+$Comp
+L Device:R R8
+U 1 1 5D91A088
+P 7700 4250
+F 0 "R8" H 7770 4296 50  0000 L CNN
+F 1 "10K" H 7770 4205 50  0000 L CNN
+F 2 "" V 7630 4250 50  0001 C CNN
+F 3 "~" H 7700 4250 50  0001 C CNN
+	1    7700 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 4550 7700 4400
+Text Label 7700 4500 0    50   ~ 0
+GND
+Wire Wire Line
+	7200 3400 7450 3400
+Text Label 7200 3400 0    50   ~ 0
+LED_2
+NoConn ~ 8900 3850
+NoConn ~ 8900 3950
+NoConn ~ 9700 3850
+NoConn ~ 9700 3950
+NoConn ~ 7450 3900
+Wire Wire Line
+	7200 4100 7700 4100
+Wire Wire Line
+	7700 4100 7950 4100
+Connection ~ 7700 4100
+Text Label 7850 4100 0    50   ~ 0
 OE
 $EndSCHEMATC
