@@ -1,34 +1,36 @@
 #ifndef __PERIODIC_MEASUREMENT_H__
 #define __PERIODIC_MEASUREMENT_H__
 
+#include "Arduino.h"
+#include "../libraries/Ultrasonic/src/Ultrasonic.h"
+
 class PeriodicMeasurement {
     public:
-        enum Unit {
-            MM,
-            CM,
-            M
-        };
 
         PeriodicMeasurement(int trigger, int echo, int periodMillis, int offsetMillis, int timeoutMillis) {
-            triggerPin = trigger;
-            echoPin = echo;
             triggerPeriodMillis = periodMillis;
-            triggerOffsetMillis = offsetMillis;
-            echoTimeoutMillis = timeoutMillis;
+            millisSinceLastMeasurement = -offsetMillis;
+
+            us = new Ultrasonic(trigger, echo, timeoutMillis * 1000);
         }
 
-        float lastDistance() { return lastDistance(CM); }
-        float lastDistance(Unit unit);
+        ~PeriodicMeasurement() {
+            delete us;
+        }
+
+        float lastDistance() { return 0; }
+        void measure(int timeElapsed);
 
     private:
-        int triggerPin;
-        int echoPin;
         int triggerPeriodMillis;
-        int triggerOffsetMillis;
-        int echoTimeoutMillis;
 
         int lastDistanceMillis = 0;
-        int millisSinceLastMeasurement = 0;
+        int millisSinceLastMeasurement;
+
+        Ultrasonic *us;
+
+        void measureNow();
+        void resetTimer();
 };
 
 #endif
