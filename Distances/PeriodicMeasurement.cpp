@@ -1,7 +1,5 @@
 #include "PeriodicMeasurement.h"
 
-#include "../libraries/Ultrasonic/src/Ultrasonic.h"
-
 void PeriodicMeasurement::measure(int timeElapsed) {
     millisSinceLastMeasurement += timeElapsed;
 
