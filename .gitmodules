@@ -4,3 +4,6 @@
 [submodule "libraries/FastLED"]
 	path = libraries/FastLED
 	url = https://github.com/FastLED/FastLED
+[submodule "libraries/Ultrasonic"]
+	path = libraries/Ultrasonic
+	url = https://github.com/ErickSimoes/Ultrasonic
