@@ -10,7 +10,7 @@ void PeriodicMeasurement::measure(int timeElapsed) {
 }
 
 void PeriodicMeasurement::measureNow() {
-
+   this->lastDistanceCM = us->read(); 
 }
 
 void PeriodicMeasurement::resetTimer() {

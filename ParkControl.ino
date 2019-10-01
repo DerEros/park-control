@@ -6,11 +6,17 @@
 #include "Pins.h"
 #include "AnimationBuilders/DefaultAnimationBuilder.h"
 #include "Animations/AnimationRenderer.h"
+#include "Distances/PeriodicMeasurement.h"
 
 const unsigned int NUM_PIXELS = 8;
 AnimationRenderer<uint32_t> *renderer;
 unsigned int previousMillis = 0;
 CRGB leds[NUM_PIXELS];
+
+const unsigned int US_PERIOD_MILLIS = 200;
+const unsigned int US_1_OFFSET_MILLIS = 10;
+
+PeriodicMeasurement distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS);
 
 void setup() {
     Serial.begin(9600);
@@ -37,7 +43,23 @@ void loop() {
     unsigned int deltaTimeMs = currentTime - previousMillis;
     previousMillis = currentTime;
 
-    renderer->render(deltaTimeMs);
+//    renderer->render(deltaTimeMs);
+    distance1.measure(deltaTimeMs);
+    float us1Distance = distance1.getLastDistanceCM();
+    Serial.print("Distance: ");
+    Serial.println(us1Distance);
+    
+    CRGB color = 0;
+    if (us1Distance > 50) {
+        color = CRGB::Green; 
+    } else if (us1Distance > 15) {
+        color = CRGB::Yellow;
+    } else {
+        color = CRGB::Red;
+    }
 
-    delay(2);
+    fill_solid(leds, NUM_PIXELS, color);
+    FastLED.show();
+
+    delay(100);
 }

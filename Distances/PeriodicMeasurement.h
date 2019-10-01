@@ -7,7 +7,7 @@
 class PeriodicMeasurement {
     public:
 
-        PeriodicMeasurement(int trigger, int echo, int periodMillis, int offsetMillis, int timeoutMillis) {
+        PeriodicMeasurement(int trigger, int echo, int periodMillis, int offsetMillis, int timeoutMillis = 40) {
             triggerPeriodMillis = periodMillis;
             millisSinceLastMeasurement = -offsetMillis;
 
@@ -18,13 +18,13 @@ class PeriodicMeasurement {
             delete us;
         }
 
-        float lastDistance() { return 0; }
+        float getLastDistanceCM() { return this->lastDistanceCM; }
         void measure(int timeElapsed);
 
     private:
         int triggerPeriodMillis;
 
-        int lastDistanceMillis = 0;
+        float lastDistanceCM = 0;
         int millisSinceLastMeasurement;
 
         Ultrasonic *us;
