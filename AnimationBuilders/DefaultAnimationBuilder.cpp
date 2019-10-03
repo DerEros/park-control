@@ -1,11 +1,12 @@
 #include "DefaultAnimationBuilder.h"
 
 #include "../Animations/MinimalPixelPattern.h"
+#include "../Animations/RepeatingPixelPattern.h"
 #include "../Animations/BlinkAnimation.h"
 
 IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
-    MinimalPixelPattern<Pixel> *patternOn = new MinimalPixelPattern<Pixel>(0x00FFDD00);
-    MinimalPixelPattern<Pixel> *patternOff = new MinimalPixelPattern<Pixel>(0x000000FF);
+    IPixelPattern<Pixel> *patternOn = new RepeatingPixelPattern<Pixel>(new MinimalPixelPattern<Pixel>(0x00FFDD00));
+    IPixelPattern<Pixel> *patternOff = new RepeatingPixelPattern<Pixel>(new MinimalPixelPattern<Pixel>(0x000000FF));
     
     BlinkAnimation<Pixel> *animation = new BlinkAnimation<Pixel>(
             PixelRange(0, 8),
