@@ -22,11 +22,15 @@ void SlideAnimation<TPixel>::advanceAnimation(unsigned int msSinceLastCall) {
     timeInFrame += msSinceLastCall;
 
     if (timeInFrame > frameLengthMs) {
-        while (timeInFrame > frameLengthMs) {
-            timeInFrame -= frameLengthMs;
-        }
-
+        resetFrameTimer();
         patternOffset++;
+    }
+}
+
+template <typename TPixel>
+void SlideAnimation<TPixel>::resetFrameTimer() {
+    while (timeInFrame > frameLengthMs) {
+        timeInFrame -= frameLengthMs;
     }
 }
 
