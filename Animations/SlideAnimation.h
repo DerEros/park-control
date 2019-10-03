@@ -35,6 +35,7 @@ class SlideAnimation : public AbstractAnimation<TPixel> {
 
         unsigned int patternOffset;
 
+        void advanceAnimation(unsigned int msSinceLastCall);
         void getPixelsLtr(std::vector<TPixel> &out);
         void getPixelsRtl(std::vector<TPixel> &out);
 };

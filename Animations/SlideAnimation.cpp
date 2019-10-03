@@ -5,7 +5,29 @@ template class SlideAnimation<uint32_t>;
 
 template <typename TPixel>
 std::vector<TPixel> SlideAnimation<TPixel>::getPixels(unsigned int msSinceLastCall) {
-    std::vector<TPixel> renderedPixels(this->getRange().length());
+    std::vector<TPixel> renderedPixels;
+
+    advanceAnimation(msSinceLastCall);
+
+    if (slideDirection == LEFT_TO_RIGHT) {
+        getPixelsLtr(renderedPixels);
+    } else {
+        getPixelsRtl(renderedPixels);
+    }
+    return renderedPixels;
+}
+
+template <typename TPixel>
+void SlideAnimation<TPixel>::advanceAnimation(unsigned int msSinceLastCall) {
+    timeInFrame += msSinceLastCall;
+
+    if (timeInFrame > frameLengthMs) {
+        while (timeInFrame > frameLengthMs) {
+            timeInFrame -= frameLengthMs;
+        }
+
+        patternOffset++;
+    }
 }
 
 template <typename TPixel>
