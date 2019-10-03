@@ -2,35 +2,45 @@
 #define __PERIODIC_MEASUREMENT_H__
 
 #include "Arduino.h"
-#include "../libraries/Ultrasonic/src/Ultrasonic.h"
 
 class PeriodicMeasurement {
     public:
 
         PeriodicMeasurement(int trigger, int echo, int periodMillis, int offsetMillis, int timeoutMillis = 40) {
-            triggerPeriodMillis = periodMillis;
-            millisSinceLastMeasurement = -offsetMillis;
+            this->triggerPeriodMillis = periodMillis;
+            this->millisSinceLastMeasurement = -offsetMillis;
 
-            us = new Ultrasonic(trigger, echo, timeoutMillis * 1000);
+            this->triggerPin = trigger;
+            this->echoPin = echo;
+            this->echoInterrupt = digitalPinToInterrupt(this->echoPin);
+
+            init();
         }
 
-        ~PeriodicMeasurement() {
-            delete us;
-        }
-
-        float getLastDistanceCM() { return this->lastDistanceCM; }
+        float getLastDistanceCM();
         void measure(int timeElapsed);
 
     private:
+        float distanceCM = 0.0;
+        volatile unsigned long pulseBeginMicros = 0;
+        volatile bool measureInProgress = false;
+
+        // How long to wait before running the next distance scan
         int triggerPeriodMillis;
 
-        float lastDistanceCM = 0;
         int millisSinceLastMeasurement;
 
-        Ultrasonic *us;
+        int triggerPin;
+        int echoPin;
+        int echoInterrupt;
+
+        void init();
 
         void measureNow();
         void resetTimer();
+
+        static void handleTriggerRise(PeriodicMeasurement *self);
+        static void handleTriggerFall(PeriodicMeasurement *self);
 };
 
 #endif

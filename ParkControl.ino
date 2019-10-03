@@ -19,7 +19,7 @@ const unsigned int US_1_OFFSET_MILLIS = 10;
 PeriodicMeasurement distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS);
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 
     Log.notice("Park Control - starting");
@@ -46,8 +46,6 @@ void loop() {
 //    renderer->render(deltaTimeMs);
     distance1.measure(deltaTimeMs);
     float us1Distance = distance1.getLastDistanceCM();
-    Serial.print("Distance: ");
-    Serial.println(us1Distance);
     
     CRGB color = 0;
     if (us1Distance > 50) {
@@ -61,5 +59,5 @@ void loop() {
     fill_solid(leds, NUM_PIXELS, color);
     FastLED.show();
 
-    delay(100);
+    delay(10);
 }
