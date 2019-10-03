@@ -7,35 +7,38 @@ class PeriodicMeasurement {
     public:
 
         PeriodicMeasurement(int trigger, int echo, int periodMillis, int offsetMillis, int timeoutMillis = 40) {
-            triggerPeriodMillis = periodMillis;
-            millisSinceLastMeasurement = -offsetMillis;
+            this->triggerPeriodMillis = periodMillis;
+            this->millisSinceLastMeasurement = -offsetMillis;
 
             this->triggerPin = trigger;
             this->echoPin = echo;
-            init();
-        }
+            this->echoInterrupt = digitalPinToInterrupt(this->echoPin);
 
-        ~PeriodicMeasurement() {
+            init();
         }
 
         float getLastDistanceCM();
         void measure(int timeElapsed);
 
     private:
+        float distanceCM = 0.0;
+        volatile unsigned long pulseBeginMicros = 0;
+        volatile bool measureInProgress = false;
+
+        // How long to wait before running the next distance scan
         int triggerPeriodMillis;
 
         int millisSinceLastMeasurement;
 
         int triggerPin;
         int echoPin;
+        int echoInterrupt;
+
+        void init();
 
         void measureNow();
         void resetTimer();
 
-        void init();
-        float distanceCM = 0.0;
-        volatile unsigned long pulseBegin = 0;
-        volatile bool measureInProgress = false;
         static void handleTriggerRise(PeriodicMeasurement *self);
         static void handleTriggerFall(PeriodicMeasurement *self);
 };
