@@ -43,8 +43,8 @@ void loop() {
     unsigned int deltaTimeMs = currentTime - previousMillis;
     previousMillis = currentTime;
 
-//    renderer->render(deltaTimeMs);
-    distance1.measure(deltaTimeMs);
+    renderer->render(deltaTimeMs);
+/*    distance1.measure(deltaTimeMs);
     float us1Distance = distance1.getLastDistanceCM();
     
     CRGB color = 0;
@@ -58,6 +58,6 @@ void loop() {
 
     fill_solid(leds, NUM_PIXELS, color);
     FastLED.show();
-
+*/
     delay(10);
 }
