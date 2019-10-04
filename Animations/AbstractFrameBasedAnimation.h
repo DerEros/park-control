@@ -6,11 +6,12 @@
 #include "AbstractAnimation.h"
 
 template <typename TPixel>
-class AbstactFrameBasedAnimation : public AbstractAnimation<TPixel> {
+class AbstractFrameBasedAnimation : public AbstractAnimation<TPixel> {
     public:
-        AbstactFrameBasedAnimation(PixelRange range, unsigned int framesPerSecond = 30) : 
+        AbstractFrameBasedAnimation(PixelRange range, unsigned int framesPerSecond = 30) : 
             AbstractAnimation<TPixel>(range),
-            _fps(framesPerSecond) {
+            _fps(framesPerSecond) 
+        {
             _lastFrameStartMillis = millis();
             _timePerFrameMillis = 1000.0 / (float)framesPerSecond;
         }

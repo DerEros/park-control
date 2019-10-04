@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 
-#include "../Animations/IAnimation.h"
 #include "../Animations/BlinkAnimation.h"
 
 typedef uint32_t Pixel;

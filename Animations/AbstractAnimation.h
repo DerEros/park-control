@@ -1,11 +1,11 @@
-#include <vector>
-
-#include "PixelRange.h"
 
 #ifndef __ABSTRACT_ANIMATION_H__
 #define __ABSTRACT_ANIMATION_H__
 
+#include <vector>
+
 #include "IAnimation.h"
+#include "PixelRange.h"
 
 template <typename TPixel>
 class AbstractAnimation : public IAnimation<TPixel> {
