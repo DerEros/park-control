@@ -31,6 +31,8 @@ class BlinkAnimation : public AbstractFrameBasedAnimation<TPixel> {
         const IPixelPattern<TPixel> &_patternOn;
         const IPixelPattern<TPixel> &_patternOff;
 
+        virtual void handleSwitchFrame();
+        virtual std::vector<TPixel> getFramePixels();
         std::vector<TPixel> readPixels(const IPixelPattern<TPixel> &pattern);
 };
 
