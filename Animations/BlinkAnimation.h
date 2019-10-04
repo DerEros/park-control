@@ -1,46 +1,35 @@
 #ifndef __BLINK_ANIMATION_H__
 #define __BLINK_ANIMATION_H__
 
-#include "AbstractAnimation.h"
+#include "AbstractFrameBasedAnimation.h"
 
 #include "IPixelPattern.h"
 
 template <typename TPixel>
-class BlinkAnimation : public AbstractAnimation<TPixel> {
+class BlinkAnimation : public AbstractFrameBasedAnimation<TPixel> {
     public:
         /**
          * @param range A range of pixels that this animation should cover
          * @param frequency The frequency in Hertz at which pixels should blink
          */
-        BlinkAnimation(PixelRange range, float frequency, 
+        BlinkAnimation(PixelRange range, unsigned int frequency, 
                 IPixelPattern<TPixel> &patternOn, IPixelPattern<TPixel> &patternOff) :
-                                                AbstractAnimation<TPixel>(range), 
-                                                _frequency(frequency),
-                                                _timePassendInPhase(0),
+                                                AbstractFrameBasedAnimation<TPixel>(range, frequency), 
                                                 _blinkPhase(OFF),
                                                 _patternOn(patternOn),
                                                 _patternOff(patternOff)
         {
-            _phaseTimeInMs = 1.0 / frequency * 1000.0;
         }
         
-        std::vector<TPixel> getPixels(unsigned int msSinceLastCall);
-
     private:
         enum BlinkPhase {
             OFF,
             ON
         };
-        const float _frequency;
-        float _phaseTimeInMs;
-        unsigned int _timePassendInPhase;
         BlinkPhase _blinkPhase;
 
         const IPixelPattern<TPixel> &_patternOn;
         const IPixelPattern<TPixel> &_patternOff;
-
-        void switchAnimationPhase();
-        void resetPhaseTime();
 
         std::vector<TPixel> readPixels(const IPixelPattern<TPixel> &pattern);
 };
