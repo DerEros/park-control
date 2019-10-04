@@ -11,5 +11,5 @@ std::vector<TPixel> AbstractFrameBasedAnimation<TPixel>::getPixels(unsigned int 
         _timeSinceLastFrameMillis -= _timePerFrameMillis;
     }
 
-    getFramePixels();
+    return getFramePixels();
 }
