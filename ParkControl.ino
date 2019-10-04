@@ -7,9 +7,12 @@
 #include "AnimationBuilders/DefaultAnimationBuilder.h"
 #include "Animations/AnimationRenderer.h"
 #include "Distances/PeriodicMeasurement.h"
+#include "Animations/ConditionalAnimation.h"
 
 const unsigned int NUM_PIXELS = 8;
+
 AnimationRenderer<uint32_t> *renderer;
+ConditionalAnimation<uint32_t, unsigned int> *animation;
 unsigned int previousMillis = 0;
 CRGB leds[NUM_PIXELS];
 
@@ -28,7 +31,8 @@ void setup() {
     FastLED.addLeds<NEOPIXEL, PIN_LED_1>(leds, NUM_PIXELS);
 
     DefaultAnimationBuilder *animationBuilder = new DefaultAnimationBuilder();
-    renderer = new AnimationRenderer<uint32_t>(*(animationBuilder->getAnimation()), leds);
+    animation = static_cast<ConditionalAnimation<uint32, unsigned int>*>(animationBuilder->getAnimation());
+    renderer = new AnimationRenderer<uint32_t>(*(animation), leds);
 
     previousMillis = millis();
 
@@ -37,12 +41,14 @@ void setup() {
     digitalWrite(PIN_ENABLE_LOGIC_SHIFTER, HIGH);
 }
 
+unsigned int currentTime = millis();
 void loop() {
 
-    unsigned int currentTime = millis();
+    currentTime = millis();
     unsigned int deltaTimeMs = currentTime - previousMillis;
     previousMillis = currentTime;
 
+    animation->setInput(currentTime);
     renderer->render(deltaTimeMs);
 /*    distance1.measure(deltaTimeMs);
     float us1Distance = distance1.getLastDistanceCM();
