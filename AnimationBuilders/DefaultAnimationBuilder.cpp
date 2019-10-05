@@ -38,15 +38,15 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
 
     std::vector<IAnimation<Pixel>*> animations { ltr, rtl };
     RangeCombineAnimation<Pixel> *inAnimation = new RangeCombineAnimation<Pixel>(animations);
-/*
+
     auto condFuncEven = [](const unsigned int &i) { return (i / 5000) % 2 == 0; };
     auto condFuncUneven = [](const unsigned int &i) { return (i / 5000) % 2 == 1; };
 
     unsigned int *initialState = new unsigned int;
     *initialState = millis();
     ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8), *initialState);
-    animation->addCondition(condFuncEven, animations);
-    animation->addCondition(condFuncUneven, animations);
-*/
-    return inAnimation;
+    animation->addCondition(condFuncEven, inAnimation);
+    animation->addCondition(condFuncUneven, inAnimation);
+
+    return animation;
 }
