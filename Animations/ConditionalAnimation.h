@@ -4,18 +4,17 @@
 #include <vector>
 #include <utility>
 
-#include "AbstractAnimation.h"
+#include "AbstractStatefulAnimation.h"
 
 template <typename TPixel, typename TInput>
-class ConditionalAnimation : public AbstractAnimation<TPixel> {
+class ConditionalAnimation : public AbstractStatefulAnimation<TPixel, TInput> {
     public:
-        ConditionalAnimation(PixelRange range) : 
-            AbstractAnimation<TPixel>(range),
-            _currentInput(0) {}
+        ConditionalAnimation(PixelRange range, TInput &initialState) : 
+            AbstractStatefulAnimation<TPixel, TInput>(range, initialState) {}
 
         std::vector<TPixel> getPixels(unsigned int msSinceLastCall) {
             for (auto conditional : _conditions) {
-                if (conditional.first(*_currentInput)) {
+                if (conditional.first(this->getState())) {
                     return conditional.second->getPixels(msSinceLastCall);
                 }
             }
@@ -23,14 +22,12 @@ class ConditionalAnimation : public AbstractAnimation<TPixel> {
 
         typedef bool(*Condition)(const TInput&);
 
-        void setInput(TInput& input) { _currentInput = &input; }
         void addCondition(Condition condition, IAnimation<TPixel> *animation) {
             _conditions.push_back(std::pair<Condition, IAnimation<TPixel>*>(condition, animation));
         }
 
     private:
         std::vector<std::pair<Condition, IAnimation<TPixel> * >> _conditions;
-        TInput* _currentInput;
 };
 
 #endif

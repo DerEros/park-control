@@ -48,7 +48,7 @@ void loop() {
     unsigned int deltaTimeMs = currentTime - previousMillis;
     previousMillis = currentTime;
 
-    animation->setInput(currentTime);
+    animation->setState(currentTime);
     renderer->render(deltaTimeMs);
 /*    distance1.measure(deltaTimeMs);
     float us1Distance = distance1.getLastDistanceCM();

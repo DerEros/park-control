@@ -37,7 +37,9 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
     auto condFuncEven = [](const unsigned int &i) { return (i / 5000) % 2 == 0; };
     auto condFuncUneven = [](const unsigned int &i) { return (i / 5000) % 2 == 1; };
 
-    ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8));
+    unsigned int *initialState = new unsigned int;
+    *initialState = millis();
+    ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8), *initialState);
     animation->addCondition(condFuncEven, ltr);
     animation->addCondition(condFuncUneven, rtl);
 
