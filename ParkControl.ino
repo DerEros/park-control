@@ -31,8 +31,9 @@ void setup() {
     FastLED.addLeds<NEOPIXEL, PIN_LED_1>(leds, NUM_PIXELS);
 
     DefaultAnimationBuilder *animationBuilder = new DefaultAnimationBuilder();
-    animation = static_cast<ConditionalAnimation<uint32, unsigned int>*>(animationBuilder->getAnimation());
-    renderer = new AnimationRenderer<uint32_t>(*(animation), leds);
+//    animation = static_cast<ConditionalAnimation<uint32, unsigned int>*>(animationBuilder->getAnimation());
+ //   renderer = new AnimationRenderer<uint32_t>(*(animation), leds);
+    renderer = new AnimationRenderer<uint32_t>(*(animationBuilder->getAnimation()), leds);
 
     previousMillis = millis();
 
@@ -48,7 +49,7 @@ void loop() {
     unsigned int deltaTimeMs = currentTime - previousMillis;
     previousMillis = currentTime;
 
-    animation->setState(currentTime);
+    //animation->setState(currentTime);
     renderer->render(deltaTimeMs);
 /*    distance1.measure(deltaTimeMs);
     float us1Distance = distance1.getLastDistanceCM();
