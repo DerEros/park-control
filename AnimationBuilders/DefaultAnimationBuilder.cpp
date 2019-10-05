@@ -21,23 +21,39 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
 
     IPixelPattern<Pixel> *pattern = new RepeatingPixelPattern<Pixel>(new SegmentPattern<Pixel>(segments));
 
-    SlideAnimation<Pixel> *ltr = new SlideAnimation<Pixel>(
+    SlideAnimation<Pixel> *ltrLeft = new SlideAnimation<Pixel>(
             PixelRange(0, 4),
             24,
             *pattern,
             SlideAnimation<Pixel>::LEFT_TO_RIGHT
     );
 
-    SlideAnimation<Pixel> *rtl = new SlideAnimation<Pixel>(
+    SlideAnimation<Pixel> *rtlRight = new SlideAnimation<Pixel>(
             PixelRange(4, 8),
             24,
             *pattern,
             SlideAnimation<Pixel>::RIGHT_TO_LEFT
     );
 
+    SlideAnimation<Pixel> *ltrRight = new SlideAnimation<Pixel>(
+            PixelRange(4, 8),
+            24,
+            *pattern,
+            SlideAnimation<Pixel>::LEFT_TO_RIGHT
+    );
 
-    std::vector<IAnimation<Pixel>*> animations { ltr, rtl };
+    SlideAnimation<Pixel> *rtlLeft = new SlideAnimation<Pixel>(
+            PixelRange(0, 4),
+            24,
+            *pattern,
+            SlideAnimation<Pixel>::RIGHT_TO_LEFT
+    );
+
+
+
+    std::vector<IAnimation<Pixel>*> animations { ltrLeft, rtlRight };
     RangeCombineAnimation<Pixel> *inAnimation = new RangeCombineAnimation<Pixel>(animations);
+    RangeCombineAnimation<Pixel> *outAnimation = new RangeCombineAnimation<Pixel>(std::vector<IAnimation<Pixel>*>{ ltrRight, rtlLeft });
 
     auto condFuncEven = [](const unsigned int &i) { return (i / 5000) % 2 == 0; };
     auto condFuncUneven = [](const unsigned int &i) { return (i / 5000) % 2 == 1; };
@@ -46,7 +62,7 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
     *initialState = millis();
     ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8), *initialState);
     animation->addCondition(condFuncEven, inAnimation);
-    animation->addCondition(condFuncUneven, inAnimation);
+    animation->addCondition(condFuncUneven, outAnimation);
 
     return animation;
 }
