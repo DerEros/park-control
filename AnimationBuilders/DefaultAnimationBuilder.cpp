@@ -7,6 +7,7 @@
 #include "../Animations/RepeatingPixelPattern.h"
 #include "../Animations/BlinkAnimation.h"
 #include "../Animations/SlideAnimation.h"
+#include "../Animations/ConditionalAnimation.h"
 
 IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
     std::vector<SegmentPattern<Pixel>::Segment> segments {
@@ -19,12 +20,28 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
 
     IPixelPattern<Pixel> *pattern = new RepeatingPixelPattern<Pixel>(new SegmentPattern<Pixel>(segments));
 
-    SlideAnimation<Pixel> *animation = new SlideAnimation<Pixel>(
+    SlideAnimation<Pixel> *ltr = new SlideAnimation<Pixel>(
+            PixelRange(0, 8),
+            24,
+            *pattern,
+            SlideAnimation<Pixel>::LEFT_TO_RIGHT
+    );
+
+    SlideAnimation<Pixel> *rtl = new SlideAnimation<Pixel>(
             PixelRange(0, 8),
             24,
             *pattern,
             SlideAnimation<Pixel>::RIGHT_TO_LEFT
     );
+
+    auto condFuncEven = [](const unsigned int &i) { return (i / 5000) % 2 == 0; };
+    auto condFuncUneven = [](const unsigned int &i) { return (i / 5000) % 2 == 1; };
+
+    unsigned int *initialState = new unsigned int;
+    *initialState = millis();
+    ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8), *initialState);
+    animation->addCondition(condFuncEven, ltr);
+    animation->addCondition(condFuncUneven, rtl);
 
     return animation;
 }
