@@ -34,18 +34,12 @@ IAnimation<Pixel> *DefaultAnimationBuilder::getAnimation() {
             SlideAnimation<Pixel>::RIGHT_TO_LEFT
     );
 
-    typedef If<Pixel, unsigned int> IfCond;
-    typedef bool(*CondFunc)(const unsigned int&);
+    auto condFuncEven = [](const unsigned int &i) { return (i / 5000) % 2 == 0; };
+    auto condFuncUneven = [](const unsigned int &i) { return (i / 5000) % 2 == 1; };
 
-    CondFunc condFuncEven = [](const unsigned int &i) { return (i / 5000) % 2 == 0; };
-    CondFunc condFuncUneven = [](const unsigned int &i) { return (i / 5000) % 2 == 1; };
-
-    std::vector<IfCond> conditions{
-        IfCond(condFuncUneven, ltr),
-        IfCond(condFuncEven, rtl)
-    };
-
-    ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8), conditions);
+    ConditionalAnimation<Pixel, unsigned int> *animation = new ConditionalAnimation<Pixel, unsigned int>(PixelRange(0, 8));
+    animation->addCondition(condFuncEven, ltr);
+    animation->addCondition(condFuncUneven, rtl);
 
     return animation;
 }

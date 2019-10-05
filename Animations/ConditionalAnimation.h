@@ -2,37 +2,34 @@
 #define __CONDITIONAL_ANIMATION_H__
 
 #include <vector>
+#include <utility>
 
 #include "AbstractAnimation.h"
 
 template <typename TPixel, typename TInput>
-struct If {
-    bool(*condition)(const TInput&);
-    IAnimation<TPixel> *animation;
-
-    If(bool(*c)(const TInput&), IAnimation<TPixel> *a) : condition(c), animation(a) {}
-};
-
-template <typename TPixel, typename TInput>
 class ConditionalAnimation : public AbstractAnimation<TPixel> {
     public:
-        ConditionalAnimation(PixelRange range, std::vector<If<TPixel, TInput>> conditions) : 
+        ConditionalAnimation(PixelRange range) : 
             AbstractAnimation<TPixel>(range),
-            _currentInput(0),
-            _conditions(conditions) {}
+            _currentInput(0) {}
 
         std::vector<TPixel> getPixels(unsigned int msSinceLastCall) {
             for (auto conditional : _conditions) {
-                if (conditional.condition(*_currentInput)) {
-                    return conditional.animation->getPixels(msSinceLastCall);
+                if (conditional.first(*_currentInput)) {
+                    return conditional.second->getPixels(msSinceLastCall);
                 }
             }
         }
 
+        typedef bool(*Condition)(const TInput&);
+
         void setInput(TInput& input) { _currentInput = &input; }
+        void addCondition(Condition condition, IAnimation<TPixel> *animation) {
+            _conditions.push_back(std::pair<Condition, IAnimation<TPixel>*>(condition, animation));
+        }
 
     private:
-        std::vector<If<TPixel, TInput>> _conditions;
+        std::vector<std::pair<Condition, IAnimation<TPixel> * >> _conditions;
         TInput* _currentInput;
 };
 
