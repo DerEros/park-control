@@ -7,6 +7,7 @@
 #include "Pins.h"
 #include "Config.h"
 #include "ParkControlState.h"
+#include "Network.h"
 #include "../Utils/Clock.h"
 
 #include "../Animations/AnimationRenderer.h"
@@ -27,6 +28,7 @@ class App {
         Clock appClock;
         Config config;
         ParkControlState state;
+        Network network;
 
         AnimationRenderer<CRGB> *renderer;
         IStatefulAnimation<CRGB, ParkControlState> *animation;

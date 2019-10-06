@@ -28,6 +28,8 @@ void App::init() {
     pinMode(PIN_ENABLE_LOGIC_SHIFTER, OUTPUT);
     delay(2000);
     digitalWrite(PIN_ENABLE_LOGIC_SHIFTER, HIGH);
+
+    network.start();
 }
 
 void App::loop() {
