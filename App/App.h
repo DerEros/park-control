@@ -8,6 +8,7 @@
 #include "Config.h"
 #include "ParkControlState.h"
 #include "Network.h"
+#include "ConfigRestApi.h"
 #include "../Utils/Clock.h"
 
 #include "../Animations/AnimationRenderer.h"
@@ -29,6 +30,7 @@ class App {
         Config config;
         ParkControlState state;
         Network network;
+        ConfigRestApi configRestApi;
 
         AnimationRenderer<CRGB> *renderer;
         IStatefulAnimation<CRGB, ParkControlState> *animation;

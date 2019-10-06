@@ -30,6 +30,7 @@ void App::init() {
     digitalWrite(PIN_ENABLE_LOGIC_SHIFTER, HIGH);
 
     network.start();
+    configRestApi.start();
 }
 
 void App::loop() {
@@ -41,5 +42,6 @@ void App::loop() {
     animation->setState(state);
     renderer->render(elapsedTime);
 
+    configRestApi.loop();
     delay(10);
 }

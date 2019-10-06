@@ -3,6 +3,14 @@
 
 class ConfigRestApi {
     public:
+        ConfigRestApi() {}
+
+        void start();
+        void loop();
+
     private:
+        //static ESP8266WebServer *_server;
+
+        static void handleGet();
 };
 #endif
