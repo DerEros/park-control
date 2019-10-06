@@ -6,7 +6,7 @@ struct PixelRange {
     int end;
 
     PixelRange(int start, int end) : start(start), end(end) {}
-    int length() const { return end - start; }
+    int length() const { return end - start + 1; }
     bool isInRange(int idx) const { return (idx >= start) && (idx <= end); }
 };
 

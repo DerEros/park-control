@@ -98,10 +98,10 @@ IAnimation<Pixel>* getTooFarAnimation(PixelRange leftRange, PixelRange rightRang
     IPixelPattern<Pixel> *blueFadePattern = getFadePattern(HUE_BLUE, 4, 9);
 
     IAnimation<Pixel>* blueSlideLeft = new SlideAnimation<Pixel>(
-        leftRange, fps, *blueFadePattern, SlideAnimation<Pixel>::LEFT_TO_RIGHT
+        leftRange, fps, *blueFadePattern, SlideAnimation<Pixel>::RIGHT_TO_LEFT
     );
     IAnimation<Pixel>* blueSlideRight = new SlideAnimation<Pixel>(
-        rightRange, fps, *blueFadePattern, SlideAnimation<Pixel>::RIGHT_TO_LEFT
+        rightRange, fps, *blueFadePattern, SlideAnimation<Pixel>::LEFT_TO_RIGHT
     );
     return new RangeCombineAnimation<Pixel>(std::vector<IAnimation<Pixel>*>{ blueSlideLeft, blueSlideRight });
 }
@@ -110,10 +110,10 @@ IAnimation<Pixel>* getCloseAnimation(PixelRange leftRange, PixelRange rightRange
     IPixelPattern<Pixel> *yellowFadePattern = getFadePattern(HUE_YELLOW, 4, 9);
 
     IAnimation<Pixel>* yellowSlideLeft = new SlideAnimation<Pixel>(
-        leftRange, fps, *yellowFadePattern, SlideAnimation<Pixel>::RIGHT_TO_LEFT
+        leftRange, fps, *yellowFadePattern, SlideAnimation<Pixel>::LEFT_TO_RIGHT
     );
     IAnimation<Pixel>* yellowSlideRight = new SlideAnimation<Pixel>(
-        rightRange, fps, *yellowFadePattern, SlideAnimation<Pixel>::LEFT_TO_RIGHT
+        rightRange, fps, *yellowFadePattern, SlideAnimation<Pixel>::RIGHT_TO_LEFT
     );
     return new RangeCombineAnimation<Pixel>(std::vector<IAnimation<Pixel>*>{ yellowSlideLeft, yellowSlideRight });
 }

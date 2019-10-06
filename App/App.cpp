@@ -5,7 +5,9 @@
 #include "../AnimationBuilders/ParkControlAnimationBuilder.h"
 #include "../Animations/IStatefulAnimation.h"
 
-App::App() : state(ParkControlState(0)) {
+App::App() : state(ParkControlState(0)),
+        distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS)
+{
     Serial.begin(115200);
     Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 
@@ -18,10 +20,6 @@ void App::init() {
     leds = new CRGB[config.getNumLeds()];
 
     FastLED.addLeds<NEOPIXEL, PIN_LED_1>(leds, config.getNumLeds());
-/*
-    DefaultAnimationBuilder *animationBuilder = new DefaultAnimationBuilder();
-    animation = static_cast<ConditionalAnimation<uint32, unsigned int>*>(animationBuilder->getAnimation());
-    */
 
     ParkControlAnimationBuilder animationBuilder(config);
     animation = animationBuilder.getStatefulAnimation(state);
@@ -34,8 +32,12 @@ void App::init() {
 
 void App::loop() {
     unsigned int currentTime = millis();
+    unsigned int elapsedTime = appClock.getElapsedTimeMillisAndReset();
+
+    distance1.measure(elapsedTime);
+    state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
     animation->setState(state);
-    renderer->render(appClock.getElapsedTimeMillisAndReset());
+    renderer->render(elapsedTime);
 
     delay(10);
 }
