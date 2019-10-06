@@ -1,0 +1,33 @@
+#ifndef __APP_H__
+#define __APP_H__
+
+#define FASTLED_ESP8266_NODEMCU_PIN_ORDER
+#include "../libraries/FastLED/FastLED.h"
+
+#include "Pins.h"
+#include "Config.h"
+#include "ParkControlState.h"
+#include "../Utils/Clock.h"
+
+#include "../Animations/AnimationRenderer.h"
+#include "../Distances/PeriodicMeasurement.h"
+#include "../Animations/IStatefulAnimation.h"
+
+class App {
+    public:
+        App(); 
+
+        void init();
+        void loop();
+
+    private:
+        Clock appClock;
+        Config config;
+        ParkControlState state;
+
+        AnimationRenderer<CRGB> *renderer;
+        IStatefulAnimation<CRGB, ParkControlState> *animation;
+        CRGB *leds;
+
+};
+#endif
