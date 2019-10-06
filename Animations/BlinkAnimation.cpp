@@ -2,7 +2,10 @@
 
 #include "../libraries/Arduino-Log/ArduinoLog.h"
 
+#include "../libraries/FastLED/FastLED.h"
+
 template class BlinkAnimation<uint32_t>;
+template class BlinkAnimation<CRGB>;
 
 template <typename TPixel>
 std::vector<TPixel> BlinkAnimation<TPixel>::getFramePixels() {
@@ -29,7 +32,7 @@ void BlinkAnimation<TPixel>::handleSwitchFrame() {
 template <typename TPixel>
 std::vector<TPixel> BlinkAnimation<TPixel>::readPixels(const IPixelPattern<TPixel> &pattern) {
     std::vector<TPixel> pixels;
-    for (int idx = this->getRange().start; idx < this->getRange().end; idx++) {
+    for (int idx = this->getRange().start; idx <= this->getRange().end; idx++) {
         pixels.push_back(pattern.getPixel(idx));
     }
 

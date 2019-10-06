@@ -4,7 +4,10 @@
 
 #include <Arduino.h>
 
+#include "../libraries/FastLED/FastLED.h"
+
 template class RangeCombineAnimation<uint32_t>;
+template class RangeCombineAnimation<CRGB>;
 
 template <typename TPixel>
 std::vector<TPixel> RangeCombineAnimation<TPixel>::getPixels(unsigned int msSinceLastCall) {

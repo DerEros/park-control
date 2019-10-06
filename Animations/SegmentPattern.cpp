@@ -2,7 +2,10 @@
 
 #include <Arduino.h>
 
+#include "../libraries/FastLED/FastLED.h"
+
 template class SegmentPattern<uint32_t>;
+template class SegmentPattern<CRGB>;
 
 template <typename TPixel>
 const TPixel SegmentPattern<TPixel>::getPixel(int index) const {

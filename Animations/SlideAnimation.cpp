@@ -1,7 +1,10 @@
 #include "SlideAnimation.h"
 #include <Arduino.h>
 
+#include "../libraries/FastLED/FastLED.h"
+
 template class SlideAnimation<uint32_t>;
+template class SlideAnimation<CRGB>;
 
 template <typename TPixel>
 std::vector<TPixel> SlideAnimation<TPixel>::getFramePixels() {
