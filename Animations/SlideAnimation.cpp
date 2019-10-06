@@ -25,14 +25,14 @@ void SlideAnimation<TPixel>::handleSwitchFrame() {
 
 template <typename TPixel>
 void SlideAnimation<TPixel>::getPixelsLtr(std::vector<TPixel> &out) {
-    for (unsigned int targetIdx = 0; targetIdx < this->getRange().length(); targetIdx++) {
+    for (int targetIdx = 0; targetIdx < this->getRange().length(); targetIdx++) {
         out.push_back(slidePattern.getPixel(targetIdx + patternOffset));
     }
 }
 
 template <typename TPixel>
 void SlideAnimation<TPixel>::getPixelsRtl(std::vector<TPixel> &out) {
-    for (unsigned int targetIdx = this->getRange().length(); targetIdx > 0 ; targetIdx--) {
+    for (int targetIdx = this->getRange().length() - 1; targetIdx >= 0 ; targetIdx--) {
         out.push_back(slidePattern.getPixel(targetIdx + patternOffset));
     }
 }

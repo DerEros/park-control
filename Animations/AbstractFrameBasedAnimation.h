@@ -10,6 +10,7 @@ class AbstractFrameBasedAnimation : public AbstractAnimation<TPixel> {
     public:
         AbstractFrameBasedAnimation(PixelRange range, unsigned int framesPerSecond = 30) : 
             AbstractAnimation<TPixel>(range),
+            _timeSinceLastFrameMillis(0),
             _fps(framesPerSecond) 
         {
             _lastFrameStartMillis = millis();
