@@ -8,12 +8,13 @@
 #include "Animations/AnimationRenderer.h"
 #include "Distances/PeriodicMeasurement.h"
 #include "Animations/ConditionalAnimation.h"
+#include "App/Clock.h"
 
 const unsigned int NUM_PIXELS = 8;
 
 AnimationRenderer<uint32_t> *renderer;
 ConditionalAnimation<uint32_t, unsigned int> *animation;
-unsigned int previousMillis = 0;
+Clock appClock;
 CRGB leds[NUM_PIXELS];
 
 const unsigned int US_PERIOD_MILLIS = 200;
@@ -34,22 +35,18 @@ void setup() {
     animation = static_cast<ConditionalAnimation<uint32, unsigned int>*>(animationBuilder->getAnimation());
     renderer = new AnimationRenderer<uint32_t>(*(animation), leds);
 
-    previousMillis = millis();
-
     pinMode(PIN_ENABLE_LOGIC_SHIFTER, OUTPUT);
     delay(2000);
     digitalWrite(PIN_ENABLE_LOGIC_SHIFTER, HIGH);
+
+    appClock.reset();
 }
 
-unsigned int currentTime = millis();
 void loop() {
-
-    currentTime = millis();
-    unsigned int deltaTimeMs = currentTime - previousMillis;
-    previousMillis = currentTime;
-
+    unsigned int currentTime = millis();
     animation->setState(currentTime);
-    renderer->render(deltaTimeMs);
+    renderer->render(appClock.getElapsedTimeMillis());
+    appClock.reset();
 /*    distance1.measure(deltaTimeMs);
     float us1Distance = distance1.getLastDistanceCM();
     
