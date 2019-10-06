@@ -7,7 +7,12 @@ class Clock {
     public:
         Clock() : _lastMillis(millis()) {}
 
-        unsigned long getElapsedTimeMillis() { return millis() - _lastMillis; }
+        unsigned long getElapsedTimeMillisAndReset() { 
+            unsigned long currentTime = millis();
+            unsigned long elapsedTime = currentTime - _lastMillis;
+            reset();
+            return elapsedTime;
+        }
         void reset() { _lastMillis = millis(); }
     private:
         unsigned long _lastMillis;
