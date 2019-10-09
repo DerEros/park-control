@@ -5,11 +5,13 @@
 #include "../libraries/Arduino-Log/ArduinoLog.h"
 ESP8266WebServer *_server;
 ParkControlState *_state;
+Files *_files;
 
-void ConfigRestApi::start(ParkControlState &state) {
+void ConfigRestApi::start(ParkControlState &state, Files &files) {
     Log.notice("Starting config API\n");
 
     _state = &state;
+    _files = &files;
     _server = new ESP8266WebServer(80);
 
     _server->on("/", handleGet);    
@@ -25,7 +27,31 @@ void ConfigRestApi::loop() {
 void ConfigRestApi::handleGet() {
     Log.notice("Received Get request\n");
 
-    _server->send(200, "text/plain", "Hello Park Control!");
+    Serial.println("Listing files");
+    Dir dir = SPIFFS.openDir("/");
+    Serial.println("/");
+    while (dir.next()) {
+        Serial.printf("    %s\n", dir.fileName().begin());
+    }
+    /*
+    char buff[4096];
+
+    sprintf(buff, "File listing:\n==================\n");
+    Dir dir = SPIFFS.openDir("/");
+    while (dir.next()) {
+        sprintf(buff, "%s# %s\n", buff, dir.fileName().begin());
+    }
+    _server->send(200, "text/plain", buff);
+    */
+    /*
+    if (_files->fileExists("index.html")) {
+        File file = _files->getFileForRead("/index.html");
+        _server->streamFile(file, _files->getContentType("/index.html"));
+        file.close();
+    } else {
+        //_server->send(404, "text/plain", "File not found");
+    }
+    */
 }
 
 void ConfigRestApi::handleParkControlOn() {

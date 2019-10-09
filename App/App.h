@@ -10,6 +10,7 @@
 #include "Network.h"
 #include "ConfigRestApi.h"
 #include "../Utils/Clock.h"
+#include "Files.h"
 
 #include "../Animations/AnimationRenderer.h"
 #include "../Distances/PeriodicMeasurement.h"
@@ -30,6 +31,7 @@ class App {
         Config config;
         ParkControlState state;
         Network network;
+        Files files;
         ConfigRestApi configRestApi;
 
         AnimationRenderer<CRGB> *renderer;

@@ -29,8 +29,9 @@ void App::init() {
     delay(2000);
     digitalWrite(PIN_ENABLE_LOGIC_SHIFTER, HIGH);
 
+    files.start();
     network.start();
-    configRestApi.start(state);
+    configRestApi.start(state, files);
 }
 
 void App::loop() {
