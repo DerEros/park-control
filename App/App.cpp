@@ -30,7 +30,7 @@ void App::init() {
     digitalWrite(PIN_ENABLE_LOGIC_SHIFTER, HIGH);
 
     network.start();
-    configRestApi.start();
+    configRestApi.start(state);
 }
 
 void App::loop() {
@@ -40,7 +40,10 @@ void App::loop() {
     distance1.measure(elapsedTime);
     state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
     animation->setState(state);
-    renderer->render(elapsedTime);
+
+    if (state.parkControlEnabled) {
+        renderer->render(elapsedTime);
+    }
 
     configRestApi.loop();
     delay(10);
