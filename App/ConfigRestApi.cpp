@@ -27,31 +27,13 @@ void ConfigRestApi::loop() {
 void ConfigRestApi::handleGet() {
     Log.notice("Received Get request\n");
 
-    Serial.println("Listing files");
-    Dir dir = SPIFFS.openDir("/");
-    Serial.println("/");
-    while (dir.next()) {
-        Serial.printf("    %s\n", dir.fileName().begin());
-    }
-    /*
-    char buff[4096];
-
-    sprintf(buff, "File listing:\n==================\n");
-    Dir dir = SPIFFS.openDir("/");
-    while (dir.next()) {
-        sprintf(buff, "%s# %s\n", buff, dir.fileName().begin());
-    }
-    _server->send(200, "text/plain", buff);
-    */
-    /*
-    if (_files->fileExists("index.html")) {
+    if (_files->fileExists("/index.html")) {
         File file = _files->getFileForRead("/index.html");
         _server->streamFile(file, _files->getContentType("/index.html"));
         file.close();
     } else {
-        //_server->send(404, "text/plain", "File not found");
+        _server->send(404, "text/plain", "File not found");
     }
-    */
 }
 
 void ConfigRestApi::handleParkControlOn() {
