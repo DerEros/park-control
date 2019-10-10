@@ -7,6 +7,20 @@ ESP8266WebServer *_server;
 ParkControlState *_state;
 Files *_files;
 
+bool handleFileRead(String uri) {
+    if (uri.endsWith("/")) uri += "index.html";
+    String contentType = _files->getContentType(uri);
+
+    if (_files->fileExists(uri)) {
+        File file = _files->getFileForRead(uri);
+        _server->streamFile(file, contentType);
+        file.close();
+        return true;
+    }
+
+    return false;
+}
+
 void ConfigRestApi::start(ParkControlState &state, Files &files) {
     Log.notice("Starting config API\n");
 
@@ -15,6 +29,11 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     _server = new ESP8266WebServer(80);
 
     _server->on("/", handleGet);    
+    _server->onNotFound([]() {
+        if (!handleFileRead(_server->uri())) {
+            _server->send(404, "text/plain", "File not found");
+        }
+    });
     _server->on("/parkcontrol/on", handleParkControlOn);
     _server->on("/parkcontrol/off", handleParkControlOff);
     _server->begin();
