@@ -33,3 +33,6 @@
 
 # Local compiler settings
 compile_commands.json
+
+# Node Output
+node_modules/
