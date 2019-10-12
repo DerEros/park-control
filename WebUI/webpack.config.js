@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry: './src/index.js',
     devServer: {
         contentBase: './dist',
@@ -26,7 +26,10 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use: 'html-loader',
+                use: [ {
+                    loader: 'html-loader', 
+                    options: { interpolate: true } 
+                }],
             },
         ],
     },

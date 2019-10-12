@@ -9,8 +9,7 @@ function createDocument() {
     container.innerHTML += "Whazzup?";
     container.innerHTML += "<a class='waves-effect waves-light btn'>My Button</a>";
     container.innerHTML += "<br/>";
-    container.innerHTML += require('./greeting.html');
-    container.innerHTML += require('./collapsible-test.html');
+    container.innerHTML += require('./main-page.html');
 
     return container; 
 }
