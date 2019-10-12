@@ -2,21 +2,14 @@ import 'materialize-css/dist/css/materialize.min.css';
 import './material-icons.css';
 import 'materialize-css/dist/js/materialize.min.js'
 
+import $ from 'jquery/dist/jquery.slim.min.js';
+
 function createDocument() {
-    const container = document.createElement('div');
-
-    container.innerHTML = "<h1>Hello Park Control!</h1>";
-    container.innerHTML += "Whazzup?";
-    container.innerHTML += "<a class='waves-effect waves-light btn'>My Button</a>";
-    container.innerHTML += "<br/>";
-    container.innerHTML += require('./main-page.html');
-
-    return container; 
+    return $("<div></div>").html(require('./main-page.html'));
 }
 
-document.body.appendChild(createDocument());
-
-document.addEventListener('DOMContentLoaded', function() {
+$( () => {
+    $("body").append(createDocument());
     var elems = document.querySelectorAll('.collapsible');
     var instances = M.Collapsible.init(elems, {});
 });
