@@ -37,6 +37,7 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     _server->on("/parkcontrol/on", handleParkControlOn);
     _server->on("/parkcontrol/off", handleParkControlOff);
     _server->on("/parkcontrol/state", handleParkControlState);
+    _server->on("/parkcontrol/distances", handleDistances);
     _server->begin();
 }
 
@@ -81,4 +82,22 @@ void ConfigRestApi::handleParkControlState() {
     result.concat("}");
 
     _server->send(200, "application/json", result);
+}
+
+void ConfigRestApi::handleDistances() {
+    Log.notice("Got request for distances");
+
+    switch (_server->method()) {
+        case HTTPMethod::HTTP_POST:
+            Log.notice("New distance settings posted");
+            _server->send(200, "text/plain", "OK");
+            break;
+        case HTTPMethod::HTTP_GET:
+            Log.notice("Distance settings request");
+            String fakeData = "{\"moveCloserDistance\": 100, \"idealDistance\": 80, \"moveFurtherDistance\": 20, \"criticalDistance\": 0}";
+
+            _server->send(200, "application/json", fakeData);
+            break;
+    }
+
 }

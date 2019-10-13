@@ -5,6 +5,7 @@ import 'materialize-css/dist/js/materialize.min.js'
 import $ from 'jquery/dist/jquery.min.js';
 
 import OnOff from './components/onoff.js';
+import Distances from './components/distances.js';
 
 function createDocument() {
     return $("<div></div>").html(require('./main-page.html'));
@@ -21,5 +22,13 @@ $( () => {
            parkControlEnabled = result.enabled; 
         }
         var onOff = new OnOff($("#park-control-on-off"), parkControlEnabled);
+    });
+
+    $.get("/parkcontrol/distances", (result) => {
+        var distances = {};
+        if (typeof result !== "undefined") {
+            distances = result;
+        }
+        var distanceForm = new Distances($("#distances_form"), $("#submit_distances"), distances);
     });
 });

@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">Max Distances</span>
+        Change to the mode when the measured distance is <b>higher</b> then the following:
+        <form class="container" id="distances_form">
+            <div class="row">
+                <div class="input-field col s12 m6 l4">
+                    <input placeholder="100" id="move_closer_distance" type="number" class="validate">
+                    <label for="move_closer_distance">Move closer</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input col s12 m6 l4">
+                    <input placeholder="80" id="ideal_distance" type="number" class="validate">
+                    <label for="ideal_distance">Ideal distance</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input col s12 m6 l4">
+                    <input placeholder="20" id="move_further_distance" type="number" class="validate">
+                    <label for="move_further_distance">Move further</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input col s12 m6 l4">
+                    <input placeholder="0" id="critical_distance" type="number" class="validate">
+                    <label for="critical_distance">Critical distance</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-action">
+        <a href="#" id="submit_distances">Save</a>
+    </div>
+</div>
