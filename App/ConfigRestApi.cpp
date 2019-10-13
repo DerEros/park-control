@@ -36,6 +36,7 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     });
     _server->on("/parkcontrol/on", handleParkControlOn);
     _server->on("/parkcontrol/off", handleParkControlOff);
+    _server->on("/parkcontrol/state", handleParkControlState);
     _server->begin();
 }
 
@@ -69,4 +70,15 @@ void ConfigRestApi::handleParkControlOff() {
     _state->parkControlEnabled = false;
 
     _server->send(200, "text/plain", "OK");
+}
+
+void ConfigRestApi::handleParkControlState() {
+    Log.notice("Getting park control state");
+
+    String result = "";
+    result.concat("{\"enabled\":");
+    result.concat(_state->parkControlEnabled ? "true" : "false");
+    result.concat("}");
+
+    _server->send(200, "application/json", result);
 }
