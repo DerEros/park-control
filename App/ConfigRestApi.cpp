@@ -57,7 +57,7 @@ void ConfigRestApi::handleGet() {
 }
 
 void ConfigRestApi::handleParkControlOn() {
-    Log.notice("Park control turned on");
+    Log.notice("Park control turned on\n");
 
     _state->parkControlEnabled = true;
 
@@ -65,7 +65,7 @@ void ConfigRestApi::handleParkControlOn() {
 }
 
 void ConfigRestApi::handleParkControlOff() {
-    Log.notice("Park control turned off");
+    Log.notice("Park control turned off\n");
 
     _state->parkControlEnabled = false;
 
@@ -73,7 +73,7 @@ void ConfigRestApi::handleParkControlOff() {
 }
 
 void ConfigRestApi::handleParkControlState() {
-    Log.notice("Getting park control state");
+    Log.notice("Getting park control state\n");
 
     String result = "";
     result.concat("{\"enabled\":");

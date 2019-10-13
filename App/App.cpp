@@ -9,7 +9,7 @@ App::App() : state(ParkControlState(0)),
         distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS)
 {
     Serial.begin(115200);
-    Log.begin(LOG_LEVEL_VERBOSE, &Serial);
+    Log.begin(LOG_LEVEL_NOTICE, &Serial);
 
     Log.notice("Park Control - starting");
 }
