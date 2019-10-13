@@ -44,6 +44,8 @@ void App::loop() {
 
     if (state.parkControlEnabled) {
         renderer->render(elapsedTime);
+    } else {
+        FastLED.showColor(CRGB::Black, 0);
     }
 
     configRestApi.loop();
