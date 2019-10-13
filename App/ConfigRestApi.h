@@ -18,5 +18,6 @@ class ConfigRestApi {
 
         static void handleParkControlOn();
         static void handleParkControlOff();
+        static void handleParkControlState();
 };
 #endif

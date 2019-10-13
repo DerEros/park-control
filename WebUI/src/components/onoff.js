@@ -2,9 +2,10 @@ import $ from 'jquery/dist/jquery.min.js';
 
 export default class OnOff {
 
-    constructor(element) {
+    constructor(element, initialState) {
         this.element = element;
 
+        $(element).attr("checked", initialState);
         $(element).on("change", { self: this }, this.handleOnOffChange);
     }
 
