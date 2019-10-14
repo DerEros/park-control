@@ -13,6 +13,14 @@ bool handleFileRead(String uri) {
     if (uri.endsWith("/")) uri += "index.html";
     String contentType = _files->getContentType(uri);
 
+    String uriGz = uri;
+    uriGz.concat(".gz");
+
+    if (_files->fileExists(uriGz)) {
+        uri = uriGz;
+        _server->sendHeader("Content-Encoding", "gzip");
+    }
+
     if (_files->fileExists(uri)) {
         File file = _files->getFileForRead(uri);
         _server->streamFile(file, contentType);
