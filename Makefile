@@ -13,3 +13,6 @@ ui: nodemodules
 
 compressui: ui
 	cd WebUI/dist/ && gzip *
+
+flash_ui: compressui flash_fs
+
