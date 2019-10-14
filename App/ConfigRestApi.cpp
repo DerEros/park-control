@@ -3,6 +3,8 @@
 #include <ESP8266WebServer.h>
 
 #include "../libraries/Arduino-Log/ArduinoLog.h"
+#include "../libraries/ArduinoJson/ArduinoJson.h"
+
 ESP8266WebServer *_server;
 ParkControlState *_state;
 Files *_files;
@@ -90,7 +92,7 @@ void ConfigRestApi::handleDistances() {
     switch (_server->method()) {
         case HTTPMethod::HTTP_POST:
             Log.notice("New distance settings posted");
-            _server->send(200, "text/plain", "OK");
+            handlePostingDistances();
             break;
         case HTTPMethod::HTTP_GET:
             Log.notice("Distance settings request");
@@ -100,4 +102,23 @@ void ConfigRestApi::handleDistances() {
             break;
     }
 
+}
+
+void ConfigRestApi::handlePostingDistances() {
+    const int capacity = JSON_OBJECT_SIZE(4);
+    StaticJsonDocument<capacity> doc;
+    DeserializationError err = deserializeJson(doc, _server->arg("plain"));
+
+    int minMoveCloserDistance = doc["move_closer_distance"];
+    int minIdealDistance = doc["ideal_distance"];
+    int minMoveFurtherDistance = doc["move_further_distance"];
+    int minCriticalCloseDistance = doc["critical_distance"];
+
+    Log.notice("New distance values received: (%d, %d, %d, %d) centimeters\n", 
+            minMoveCloserDistance, 
+            minIdealDistance,
+            minMoveFurtherDistance,
+            minCriticalCloseDistance);
+
+    _server->send(200, "text/plain", "OK");
 }
