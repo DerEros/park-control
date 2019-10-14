@@ -26,8 +26,8 @@ void Network::start() {
     }
 
     Log.trace(" connected! \n");
-    Serial.printf("IP Address: \n");
-    Serial.println(WiFi.localIP());
+    Log.trace("IP Address: \n");
+    Log.trace(WiFi.localIP().toString().c_str());
 
     MDNS.begin(dnsName);
 }
