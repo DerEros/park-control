@@ -117,10 +117,10 @@ void ConfigRestApi::handlePostingDistances() {
     StaticJsonDocument<capacity> doc;
     DeserializationError err = deserializeJson(doc, _server->arg("plain"));
 
-    int minMoveCloserDistance = doc["move_closer_distance"];
-    int minIdealDistance = doc["ideal_distance"];
-    int minMoveFurtherDistance = doc["move_further_distance"];
-    int minCriticalCloseDistance = doc["critical_distance"];
+    int minMoveCloserDistance = doc["moveCloserDistance"];
+    int minIdealDistance = doc["idealDistance"];
+    int minMoveFurtherDistance = doc["moveFurtherDistance"];
+    int minCriticalCloseDistance = doc["criticalDistance"];
 
     Log.notice("New distance values received: (%d, %d, %d, %d) centimeters\n", 
             minMoveCloserDistance, 
