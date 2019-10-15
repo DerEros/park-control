@@ -23,3 +23,7 @@ bool Files::fileExists(String filename) {
 File Files::getFileForRead(String filename) {
     return SPIFFS.open(filename, "r");
 }
+
+File Files::getFileForWrite(String filename) {
+    return SPIFFS.open(filename, "w");
+}

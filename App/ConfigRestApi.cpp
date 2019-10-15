@@ -9,6 +9,8 @@ ESP8266WebServer *_server;
 ParkControlState *_state;
 Files *_files;
 
+const char *DISTANCES_CONFIG_FILE_NAME = "distances.json";
+
 bool handleFileRead(String uri) {
     if (uri.endsWith("/")) uri += "index.html";
     String contentType = _files->getContentType(uri);
@@ -113,6 +115,8 @@ void ConfigRestApi::handleDistances() {
 }
 
 void ConfigRestApi::handlePostingDistances() {
+    File distancesConfigFile = _files->getFileForWrite(DISTANCES_CONFIG_FILE_NAME);
+
     const int capacity = JSON_OBJECT_SIZE(4);
     StaticJsonDocument<capacity> doc;
     DeserializationError err = deserializeJson(doc, _server->arg("plain"));
@@ -127,6 +131,8 @@ void ConfigRestApi::handlePostingDistances() {
             minIdealDistance,
             minMoveFurtherDistance,
             minCriticalCloseDistance);
+
+    serializeJson(doc, distancesConfigFile);
 
     _server->send(200, "text/plain", "OK");
 }
