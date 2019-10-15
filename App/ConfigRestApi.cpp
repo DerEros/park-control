@@ -12,6 +12,7 @@ Files *_files;
 const char *DISTANCES_CONFIG_FILE_NAME = "distances.json";
 
 bool handleFileRead(String uri) {
+    Log.trace("Trying to read file %s\n", uri.c_str());
     if (uri.endsWith("/")) uri += "index.html";
     String contentType = _files->getContentType(uri);
 
@@ -19,11 +20,12 @@ bool handleFileRead(String uri) {
     uriGz.concat(".gz");
 
     if (_files->fileExists(uriGz)) {
+        Log.trace("Found GZ version of file\n");
         uri = uriGz;
-        _server->sendHeader("Content-Encoding", "gzip");
     }
 
     if (_files->fileExists(uri)) {
+        Log.trace("Transferring %s\n", uri.c_str());
         File file = _files->getFileForRead(uri);
         _server->streamFile(file, contentType);
         file.close();
@@ -40,7 +42,6 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     _files = &files;
     _server = new ESP8266WebServer(80);
 
-    _server->on("/", handleGet);    
     _server->onNotFound([]() {
         if (!handleFileRead(_server->uri())) {
             _server->send(404, "text/plain", "File not found");
@@ -55,18 +56,6 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
 
 void ConfigRestApi::loop() {
     _server->handleClient();
-}
-
-void ConfigRestApi::handleGet() {
-    Log.notice("Received Get request\n");
-
-    if (_files->fileExists("/index.html")) {
-        File file = _files->getFileForRead("/index.html");
-        _server->streamFile(file, _files->getContentType("/index.html"));
-        file.close();
-    } else {
-        _server->send(404, "text/plain", "File not found");
-    }
 }
 
 void ConfigRestApi::handleParkControlOn() {

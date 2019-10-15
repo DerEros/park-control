@@ -11,6 +11,8 @@ void Files::start() {
 String Files::getContentType(String filename) {
     if (filename.endsWith("html")) {
         return "text/html";
+    } else if (filename.endsWith("js")) {
+        return "application/javascript";
     } else {
         return "text/plain";
     }
