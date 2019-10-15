@@ -106,9 +106,16 @@ void ConfigRestApi::handleDistances() {
             break;
         case HTTPMethod::HTTP_GET:
             Log.notice("Distance settings request");
-            String fakeData = "{\"moveCloserDistance\": 100, \"idealDistance\": 80, \"moveFurtherDistance\": 20, \"criticalDistance\": 0}";
+            if (_files->fileExists(DISTANCES_CONFIG_FILE_NAME)) {
+                Log.trace("Sending stored distance config");
+                File distancesConfigFile = _files->getFileForRead(DISTANCES_CONFIG_FILE_NAME);
+                _server->streamFile(distancesConfigFile, "application/json");
+            } else {
+                Log.trace("No stored distance config found, sending defaults");
+                String defaultData = "{\"moveCloserDistance\": 100, \"idealDistance\": 80, \"moveFurtherDistance\": 20, \"criticalDistance\": 0}";
+                _server->send(200, "application/json", defaultData);
+            }
 
-            _server->send(200, "application/json", fakeData);
             break;
     }
 
