@@ -113,9 +113,12 @@ void ConfigRestApi::handleDistances() {
 void ConfigRestApi::handlePostingDistances() {
     File distancesConfigFile = _files->getFileForWrite(DISTANCES_CONFIG_FILE_NAME);
 
+    char buffer[1024];
     const int capacity = JSON_OBJECT_SIZE(4);
     StaticJsonDocument<capacity> doc;
-    DeserializationError err = deserializeJson(doc, _server->arg("plain"));
+    strlcpy(buffer, _server->arg("plain").c_str(), 1023);
+    Log.verbose("%s\n", buffer);
+    DeserializationError err = deserializeJson(doc, buffer);
 
     int minMoveCloserDistance = doc["moveCloserDistance"];
     int minIdealDistance = doc["idealDistance"];
