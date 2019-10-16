@@ -16,3 +16,4 @@ compressui: ui
 
 flash_ui: compressui flash_fs
 
+flash_all: flash flash_fs
