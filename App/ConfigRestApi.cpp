@@ -5,11 +5,11 @@
 #include "../libraries/Arduino-Log/ArduinoLog.h"
 #include "../libraries/ArduinoJson/ArduinoJson.h"
 
+#include "FileNames.h"
+
 ESP8266WebServer *_server;
 ParkControlState *_state;
 Files *_files;
-
-const char *DISTANCES_CONFIG_FILE_NAME = "distances.json";
 
 bool handleFileRead(String uri) {
     Log.trace("Trying to read file %s\n", uri.c_str());
@@ -134,4 +134,6 @@ void ConfigRestApi::handlePostingDistances() {
     serializeJson(doc, distancesConfigFile);
 
     _server->send(200, "text/plain", "OK");
+
+    ESP.restart();
 }

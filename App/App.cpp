@@ -31,6 +31,7 @@ void App::init() {
 
     files.start();
     network.start();
+    config.load(files);
     configRestApi.start(state, files);
 }
 
