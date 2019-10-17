@@ -4,10 +4,12 @@
 struct ParkControlState {
     unsigned int distanceCM;
     bool parkControlEnabled;
+    bool parkControlActive;
 
     ParkControlState(unsigned int dist) : 
         distanceCM(dist),
-        parkControlEnabled(true)
+        parkControlEnabled(true),
+        parkControlActive(true)
     {}
 };
 

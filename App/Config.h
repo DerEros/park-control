@@ -17,6 +17,8 @@ class Config {
             minCriticalCloseDistance = 0;
 
             animationFps = 24;
+
+            inactiveTimeout = 5000;
         }
 
         void load(Files &files) {
@@ -65,6 +67,8 @@ class Config {
 
         unsigned int getAnimationFps() { return animationFps; }
 
+        unsigned int getInactiveTimeout() { return inactiveTimeout; }
+
         void setNumLeds(unsigned int m) { numLeds = m; }
         void setMinMoveCloserDistance(unsigned int m) { minMoveCloserDistance = m; }
         void setMinIdealDistance(unsigned int m) { minIdealDistance = m; }
@@ -78,5 +82,7 @@ class Config {
         unsigned int minCriticalCloseDistance;
 
         unsigned int animationFps;
+
+        unsigned int inactiveTimeout;
 };
 #endif

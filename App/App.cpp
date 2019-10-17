@@ -6,7 +6,9 @@
 #include "../Animations/IStatefulAnimation.h"
 
 App::App() : state(ParkControlState(0)),
-        distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS)
+        distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS),
+        motionDetector(1000, 9.0),
+        timeOfLastMovementMillis(0)
 {
     Serial.begin(115200);
     Log.begin(LOG_LEVEL_TRACE, &Serial);
@@ -33,7 +35,6 @@ void App::init() {
     ParkControlAnimationBuilder animationBuilder(*config);
     animation = animationBuilder.getStatefulAnimation(state);
     renderer = new AnimationRenderer<CRGB>(*(animation), leds);
-
 }
 
 void App::loop() {
@@ -42,9 +43,20 @@ void App::loop() {
 
     distance1.measure(elapsedTime);
     state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
-    animation->setState(state);
+    motionDetector.sample(elapsedTime, state.distanceCM);
 
-    if (state.parkControlEnabled) {
+    Log.verbose("Motion detected: %s \n ", (motionDetector.isMovementDetected()) ? "true" : "false");
+    if (motionDetector.isMovementDetected()) {
+        state.parkControlActive = true;
+        timeOfLastMovementMillis = millis();
+    } else {
+        if (millis() - timeOfLastMovementMillis > config.getInactiveTimeout()) {
+            state.parkControlActive = false;
+        }
+    }
+
+    animation->setState(state);
+    if (state.parkControlEnabled && state.parkControlActive) {
         renderer->render(elapsedTime);
     } else {
         FastLED.showColor(CRGB::Black, 0);

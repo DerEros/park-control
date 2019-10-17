@@ -14,6 +14,7 @@
 
 #include "../Animations/AnimationRenderer.h"
 #include "../Distances/PeriodicMeasurement.h"
+#include "../Distances/MotionDetector.h"
 #include "../Animations/IStatefulAnimation.h"
 
 const unsigned int US_PERIOD_MILLIS = 200;
@@ -39,5 +40,8 @@ class App {
         CRGB *leds;
         
         PeriodicMeasurement distance1;
+        MotionDetector motionDetector;
+
+        unsigned int timeOfLastMovementMillis;
 };
 #endif
