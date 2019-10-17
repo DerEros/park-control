@@ -30,5 +30,13 @@ $( () => {
             distances = result;
         }
         var distanceForm = new Distances($("#distances_form"), $("#submit_distances"), distances);
+    }).fail(() => {
+        var distances = {
+            moveCloserDistance: 0,
+            idealDistance: 0,
+            moveFurtherDistance: 0,
+            criticalDistance: 0
+        };
+        var distanceForm = new Distances($("#distances_form"), $("#submit_distances"), distances);
     });
 });

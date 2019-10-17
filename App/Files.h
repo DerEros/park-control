@@ -13,6 +13,7 @@ class Files {
         String getContentType(String filename);
         bool fileExists(String filename);
         File getFileForRead(String filename);
+        File getFileForWrite(String filename);
     private:
 
 

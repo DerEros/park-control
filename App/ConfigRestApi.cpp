@@ -3,15 +3,29 @@
 #include <ESP8266WebServer.h>
 
 #include "../libraries/Arduino-Log/ArduinoLog.h"
+#include "../libraries/ArduinoJson/ArduinoJson.h"
+
+#include "FileNames.h"
+
 ESP8266WebServer *_server;
 ParkControlState *_state;
 Files *_files;
 
 bool handleFileRead(String uri) {
+    Log.trace("Trying to read file %s\n", uri.c_str());
     if (uri.endsWith("/")) uri += "index.html";
     String contentType = _files->getContentType(uri);
 
+    String uriGz = uri;
+    uriGz.concat(".gz");
+
+    if (_files->fileExists(uriGz)) {
+        Log.trace("Found GZ version of file\n");
+        uri = uriGz;
+    }
+
     if (_files->fileExists(uri)) {
+        Log.trace("Transferring %s\n", uri.c_str());
         File file = _files->getFileForRead(uri);
         _server->streamFile(file, contentType);
         file.close();
@@ -28,7 +42,6 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     _files = &files;
     _server = new ESP8266WebServer(80);
 
-    _server->on("/", handleGet);    
     _server->onNotFound([]() {
         if (!handleFileRead(_server->uri())) {
             _server->send(404, "text/plain", "File not found");
@@ -43,18 +56,6 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
 
 void ConfigRestApi::loop() {
     _server->handleClient();
-}
-
-void ConfigRestApi::handleGet() {
-    Log.notice("Received Get request\n");
-
-    if (_files->fileExists("/index.html")) {
-        File file = _files->getFileForRead("/index.html");
-        _server->streamFile(file, _files->getContentType("/index.html"));
-        file.close();
-    } else {
-        _server->send(404, "text/plain", "File not found");
-    }
 }
 
 void ConfigRestApi::handleParkControlOn() {
@@ -85,19 +86,60 @@ void ConfigRestApi::handleParkControlState() {
 }
 
 void ConfigRestApi::handleDistances() {
-    Log.notice("Got request for distances");
+    Log.notice("Got request for distances\n");
 
     switch (_server->method()) {
         case HTTPMethod::HTTP_POST:
-            Log.notice("New distance settings posted");
-            _server->send(200, "text/plain", "OK");
+            Log.notice("New distance settings posted\n");
+            handlePostingDistances();
             break;
         case HTTPMethod::HTTP_GET:
-            Log.notice("Distance settings request");
-            String fakeData = "{\"moveCloserDistance\": 100, \"idealDistance\": 80, \"moveFurtherDistance\": 20, \"criticalDistance\": 0}";
+            Log.notice("Distance settings request\n");
+            if (_files->fileExists(DISTANCES_CONFIG_FILE_NAME)) {
+                Log.trace("Sending stored distance config\n");
+                File distancesConfigFile = _files->getFileForRead(DISTANCES_CONFIG_FILE_NAME);
+                _server->streamFile(distancesConfigFile, "application/json");
+            } else {
+                Log.trace("No stored distance config found, sending defaults\n");
+                String defaultData = "{\"moveCloserDistance\": 100, \"idealDistance\": 80, \"moveFurtherDistance\": 20, \"criticalDistance\": 0}";
+                _server->send(200, "application/json", defaultData);
+            }
 
-            _server->send(200, "application/json", fakeData);
             break;
     }
 
+}
+
+void ConfigRestApi::handlePostingDistances() {
+    File distancesConfigFile = _files->getFileForWrite(DISTANCES_CONFIG_FILE_NAME);
+
+    char buffer[1024];
+    memset(buffer, 0, 1024);
+    const int capacity = JSON_OBJECT_SIZE(4);
+    StaticJsonDocument<capacity> doc;
+    strlcpy(buffer, _server->arg("plain").c_str(), 1023);
+    Log.verbose("%s\n", buffer);
+
+    distancesConfigFile.write((const uint8_t *)buffer, strlen(buffer));
+    distancesConfigFile.close();
+
+    _server->send(200, "text/plain", "OK");
+
+    DeserializationError err = deserializeJson(doc, buffer);
+
+    int minMoveCloserDistance = doc["moveCloserDistance"];
+    int minIdealDistance = doc["idealDistance"];
+    int minMoveFurtherDistance = doc["moveFurtherDistance"];
+    int minCriticalCloseDistance = doc["criticalDistance"];
+
+    Log.notice("New distance values received: (%d, %d, %d, %d) centimeters\n", 
+            minMoveCloserDistance, 
+            minIdealDistance,
+            minMoveFurtherDistance,
+            minCriticalCloseDistance);
+
+    delay(10);
+    Log.notice("Restarting to activate new settings\n");
+
+    ESP.restart();
 }
