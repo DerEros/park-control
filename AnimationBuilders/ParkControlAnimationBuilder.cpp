@@ -51,17 +51,21 @@ IStatefulAnimation<Pixel, State>* ParkControlAnimationBuilder::getStatefulAnimat
     ConditionalAnimation<Pixel, State>* parkControlAnimation = 
         new ConditionalAnimation<Pixel, State>(fullRange, state);
 
+    Log.verbose("(%d, %d, %d, %d)\n", config->getMinMoveCloserDistance(),
+            config->getMinIdealDistance(), config->getMinMoveFurtherDistance(),
+            config->getMinCriticalCloseDistance());
+
     parkControlAnimation->addCondition(
-            [](const State& s){ return s.distanceCM > 50; },
+            [=](const State& s){ return s.distanceCM > config->getMinMoveCloserDistance(); },
             getTooFarAnimation(leftRange, rightRange, config->getAnimationFps()));
     parkControlAnimation->addCondition(
-            [](const State& s){ return s.distanceCM > 40; },
+            [=](const State& s){ return s.distanceCM > config->getMinIdealDistance(); },
             greenBlinkAnimation);
     parkControlAnimation->addCondition(
-            [](const State& s){ return s.distanceCM > 15; },
+            [=](const State& s){ return s.distanceCM > config->getMinMoveFurtherDistance(); },
             getCloseAnimation(leftRange, rightRange, config->getAnimationFps()));
     parkControlAnimation->addCondition(
-            [](const State& s){ return s.distanceCM > 0; },
+            [=](const State& s){ return s.distanceCM > config->getMinCriticalCloseDistance(); },
             redBlinkAnimation);
     parkControlAnimation->addCondition(
             [](const State& s){ return true; },
