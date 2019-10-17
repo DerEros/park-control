@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <utility>
+#include <functional>
 
 #include "AbstractStatefulAnimation.h"
 
@@ -20,7 +21,7 @@ class ConditionalAnimation : public AbstractStatefulAnimation<TPixel, TInput> {
             }
         }
 
-        typedef bool(*Condition)(const TInput&);
+        typedef std::function<bool(const TInput&)> Condition;
 
         void addCondition(Condition condition, IAnimation<TPixel> *animation) {
             _conditions.push_back(std::pair<Condition, IAnimation<TPixel>*>(condition, animation));
