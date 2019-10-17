@@ -24,10 +24,17 @@ class Config {
             if (files.fileExists(DISTANCES_CONFIG_FILE_NAME)) {
                 Log.trace("Found distances config file: %s\n", DISTANCES_CONFIG_FILE_NAME);
                 File distancesFile = files.getFileForRead(DISTANCES_CONFIG_FILE_NAME);
-                Serial.println(distancesFile);
-                const size_t capacity = JSON_OBJECT_SIZE(4) + 100;
-                DynamicJsonDocument doc(capacity);
-                deserializeJson(doc, distancesFile);
+                
+                char buffer[1024];
+                memset((void*)buffer, 0, 1024);
+                distancesFile.read((uint8_t*)buffer, 1024);
+                Log.trace("Distances file content: %s\n", buffer);
+                const size_t capacity = JSON_OBJECT_SIZE(4);
+                StaticJsonDocument<capacity> doc;
+                DeserializationError err = deserializeJson(doc, buffer);
+                if (err) {
+                    Log.error("Error deserializing config file: %s\n", err.c_str());
+                }
 
                 setMinMoveCloserDistance(doc["moveCloserDistance"]);
                 setMinIdealDistance(doc["idealDistance"]);
@@ -35,17 +42,10 @@ class Config {
                 setMinCriticalCloseDistance(doc["criticalDistance"]);
 
                 Log.trace("Loaded distances (%d, %d, %d, %d)\n",
-                        doc["moveCloserDistance"],
-                        doc["idealDistance"],
-                        doc["moveFurtherDistance"],
-                        doc["criticalDistance"]);
-                /*
-                Log.trace("Loaded distances (%d, %d, %d, %d)\n",
                         minMoveCloserDistance,
                         minIdealDistance,
                         minMoveFurtherDistance,
                         minCriticalCloseDistance);
-                        */
             } else {
                 Log.trace("Distances config file not found (%s)\n", DISTANCES_CONFIG_FILE_NAME);
             }

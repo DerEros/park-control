@@ -86,21 +86,21 @@ void ConfigRestApi::handleParkControlState() {
 }
 
 void ConfigRestApi::handleDistances() {
-    Log.notice("Got request for distances");
+    Log.notice("Got request for distances\n");
 
     switch (_server->method()) {
         case HTTPMethod::HTTP_POST:
-            Log.notice("New distance settings posted");
+            Log.notice("New distance settings posted\n");
             handlePostingDistances();
             break;
         case HTTPMethod::HTTP_GET:
-            Log.notice("Distance settings request");
+            Log.notice("Distance settings request\n");
             if (_files->fileExists(DISTANCES_CONFIG_FILE_NAME)) {
-                Log.trace("Sending stored distance config");
+                Log.trace("Sending stored distance config\n");
                 File distancesConfigFile = _files->getFileForRead(DISTANCES_CONFIG_FILE_NAME);
                 _server->streamFile(distancesConfigFile, "application/json");
             } else {
-                Log.trace("No stored distance config found, sending defaults");
+                Log.trace("No stored distance config found, sending defaults\n");
                 String defaultData = "{\"moveCloserDistance\": 100, \"idealDistance\": 80, \"moveFurtherDistance\": 20, \"criticalDistance\": 0}";
                 _server->send(200, "application/json", defaultData);
             }
@@ -114,10 +114,17 @@ void ConfigRestApi::handlePostingDistances() {
     File distancesConfigFile = _files->getFileForWrite(DISTANCES_CONFIG_FILE_NAME);
 
     char buffer[1024];
+    memset(buffer, 0, 1024);
     const int capacity = JSON_OBJECT_SIZE(4);
     StaticJsonDocument<capacity> doc;
     strlcpy(buffer, _server->arg("plain").c_str(), 1023);
     Log.verbose("%s\n", buffer);
+
+    distancesConfigFile.write((const uint8_t *)buffer, strlen(buffer));
+    distancesConfigFile.close();
+
+    _server->send(200, "text/plain", "OK");
+
     DeserializationError err = deserializeJson(doc, buffer);
 
     int minMoveCloserDistance = doc["moveCloserDistance"];
@@ -131,9 +138,8 @@ void ConfigRestApi::handlePostingDistances() {
             minMoveFurtherDistance,
             minCriticalCloseDistance);
 
-    serializeJson(doc, distancesConfigFile);
-
-    _server->send(200, "text/plain", "OK");
+    delay(10);
+    Log.notice("Restarting to activate new settings\n");
 
     ESP.restart();
 }

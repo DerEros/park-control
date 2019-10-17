@@ -3,9 +3,11 @@
 #include "../libraries/Arduino-Log/ArduinoLog.h"
 
 void Files::start() {
-    Log.notice("SPIFFS starting");
+    Log.notice("SPIFFS starting\n");
 
     SPIFFS.begin();
+
+    Log.trace("SPIFFS started\n");
 }
 
 String Files::getContentType(String filename) {
