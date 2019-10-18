@@ -2,6 +2,6 @@
 
 #include "../libraries/Arduino-Log/ArduinoLog.h"
 
-IAnimation<Pixel> HalloweenAnimationBuilder::getAnimation() {
+IAnimation<Pixel>* HalloweenAnimationBuilder::getAnimation() {
     Log.notice("Creating Halloween animation\n");
 }

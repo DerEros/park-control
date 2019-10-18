@@ -13,7 +13,7 @@ class HalloweenAnimationBuilder {
     public:
         HalloweenAnimationBuilder() {}
 
-        IAnimation<Pixel> getAnimation();
+        IAnimation<Pixel>* getAnimation();
     private:
 };
 
