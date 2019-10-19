@@ -3,6 +3,7 @@
 #include "../libraries/Arduino-Log/ArduinoLog.h"
 #include "Config.h"
 #include "../AnimationBuilders/ParkControlAnimationBuilder.h"
+#include "../AnimationBuilders/HalloweenAnimationBuilder.h"
 #include "../Animations/IStatefulAnimation.h"
 
 App::App() : state(ParkControlState(0)),
@@ -34,9 +35,13 @@ void App::init() {
     if (config.getAnimationMode() == Config::PARK_CONTROL) {
         ParkControlAnimationBuilder animationBuilder(config);
         animation = animationBuilder.getStatefulAnimation(state);
+        renderer = new AnimationRenderer<CRGB>(*(animation), leds);
     } else if (config.getAnimationMode() == Config::HALLOWEEN) {
+        HalloweenAnimationBuilder animationBuilder;
+        simpleAnimation = animationBuilder.getAnimation();
+        renderer = new AnimationRenderer<CRGB>(*(simpleAnimation), leds);
     }
-    renderer = new AnimationRenderer<CRGB>(*(animation), leds);
+    Log.trace("Initialization done\n");
 }
 
 void App::loop() {
@@ -65,7 +70,7 @@ void App::loop() {
             FastLED.showColor(CRGB::Black, 0);
         }
     } else {
-
+        renderer->render(elapsedTime);
     }
 
     configRestApi.loop();

@@ -37,6 +37,7 @@ class App {
 
         AnimationRenderer<CRGB> *renderer;
         IStatefulAnimation<CRGB, ParkControlState> *animation;
+        IAnimation<CRGB> *simpleAnimation;
         CRGB *leds;
         
         PeriodicMeasurement distance1;
