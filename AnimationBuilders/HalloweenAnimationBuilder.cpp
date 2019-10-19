@@ -6,8 +6,8 @@
 
 DEFINE_GRADIENT_PALETTE(paletteDef) {
     0,   0,   0,   0,
-    188, 255, 10,   6,
-    255, 228, 235, 6
+    190, 255, 35,   5,
+    255, 228, 180, 6
 };
 
 IAnimation<Pixel>* HalloweenAnimationBuilder::getAnimation() {
@@ -17,7 +17,7 @@ IAnimation<Pixel>* HalloweenAnimationBuilder::getAnimation() {
     CRGBPalette256 palette = paletteDef;
 
     Log.trace("Instantiating animation\n");
-    IAnimation<Pixel> *animation = new FlickerAnimation(palette, PixelRange(0, 3), 9);
+    IAnimation<Pixel> *animation = new FlickerAnimation(palette, PixelRange(0, 8), 20, 30);
 
     return animation;
 }
