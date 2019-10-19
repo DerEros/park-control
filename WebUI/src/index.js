@@ -6,16 +6,13 @@ import $ from 'jquery/dist/jquery.min.js';
 
 import OnOff from './components/onoff.js';
 import Distances from './components/distances.js';
+import ModeSelect from './components/modeselect.js';
 
 function createDocument() {
     return $("<div></div>").html(require('./main-page.html'));
 }
 
-$( () => {
-    $("body").append(createDocument());
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems, {});
-
+function initOnOff() {
     $.get("/parkcontrol/state", (result) => {
         var parkControlEnabled = true;
         if (typeof result !== "undefined") {
@@ -23,7 +20,9 @@ $( () => {
         }
         var onOff = new OnOff($("#park-control-on-off"), parkControlEnabled);
     });
+}
 
+function initDistance() {
     $.get("/parkcontrol/distances", (result) => {
         var distances = {};
         if (typeof result !== "undefined") {
@@ -39,4 +38,19 @@ $( () => {
         };
         var distanceForm = new Distances($("#distances_form"), $("#submit_distances"), distances);
     });
+}
+
+function initAnimationMode() {
+    var parkControlModeAction = $("#park_control_mode");
+    var halloweenModeAction = $("#halloween_mode");
+
+    var modeSelect = new ModeSelect(parkControlModeAction, halloweenModeAction);
+}
+
+$( () => {
+    $("body").append(createDocument());
+
+    initOnOff();
+    initDistance();
+    initAnimationMode();
 });

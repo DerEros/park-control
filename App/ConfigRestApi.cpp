@@ -51,6 +51,7 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     _server->on("/parkcontrol/off", handleParkControlOff);
     _server->on("/parkcontrol/state", handleParkControlState);
     _server->on("/parkcontrol/distances", handleDistances);
+    _server->on("/parkcontrol/animationmode", handleAnimationMode);
     _server->begin();
 }
 
@@ -142,4 +143,32 @@ void ConfigRestApi::handlePostingDistances() {
     Log.notice("Restarting to activate new settings\n");
 
     ESP.restart();
+}
+
+void ConfigRestApi::handleAnimationMode() {
+    Log.notice("Request for animation mode\n");
+
+    const char* messageBuffer; 
+    File animationModeFile;
+    switch (_server->method()) {
+        case HTTPMethod::HTTP_POST:
+            Log.trace("Writing animation mode\n");
+            animationModeFile = _files->getFileForWrite(ANIMATION_MODE_CONFIG_FILE_NAME);
+            messageBuffer = _server->arg("plain").c_str();
+            animationModeFile.write(messageBuffer, strlen(messageBuffer));
+            animationModeFile.close();
+            _server->send(202, "text/plain", "OK");
+            break;
+        case HTTPMethod::HTTP_GET:
+            Log.trace("Reading animation mode\n");
+            if (_files->fileExists(ANIMATION_MODE_CONFIG_FILE_NAME)) {
+                animationModeFile = _files->getFileForRead(ANIMATION_MODE_CONFIG_FILE_NAME);
+                _server->streamFile(animationModeFile, "application/json");
+                animationModeFile.close();
+            } else {
+                _server->send(200, "application/json", "{\"animationMode\":0}");
+            }
+            break;
+    }
+
 }

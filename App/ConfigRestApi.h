@@ -21,5 +21,6 @@ class ConfigRestApi {
         static void handleParkControlState();
         static void handleDistances();
         static void handlePostingDistances();
+        static void handleAnimationMode();
 };
 #endif
