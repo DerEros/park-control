@@ -7,7 +7,7 @@
 #include "../Animations/IStatefulAnimation.h"
 
 App::App() : state(ParkControlState(0)),
-        //distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS),
+        distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS),
         motionDetector(1000, 9.0),
         timeOfLastMovementMillis(0),
         halloweenState(false)
@@ -51,8 +51,8 @@ void App::loop() {
     unsigned int elapsedTime = appClock.getElapsedTimeMillisAndReset();
 
     if (config.getAnimationMode() == Config::PARK_CONTROL) {
-        //distance1.measure(elapsedTime);
-        //state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
+        distance1.measure(elapsedTime);
+        state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
         motionDetector.sample(elapsedTime, state.distanceCM);
 
         Log.verbose("Motion detected: %s \n ", (motionDetector.isMovementDetected()) ? "true" : "false");

@@ -42,7 +42,7 @@ class App {
         CRGB *leds;
         HalloweenState halloweenState;
         
-        //PeriodicMeasurement distance1;
+        PeriodicMeasurement distance1;
         MotionDetector motionDetector;
 
         unsigned int timeOfLastMovementMillis;
