@@ -9,6 +9,7 @@
 
 ESP8266WebServer *_server;
 ParkControlState *_state;
+HalloweenState *_halloweenState;
 Files *_files;
 
 bool handleFileRead(String uri) {
@@ -35,10 +36,11 @@ bool handleFileRead(String uri) {
     return false;
 }
 
-void ConfigRestApi::start(ParkControlState &state, Files &files) {
+void ConfigRestApi::start(ParkControlState &state, HalloweenState &halloweenState, Files &files) {
     Log.notice("Starting config API\n");
 
     _state = &state;
+    _halloweenState = &halloweenState;
     _files = &files;
     _server = new ESP8266WebServer(80);
 
@@ -52,6 +54,8 @@ void ConfigRestApi::start(ParkControlState &state, Files &files) {
     _server->on("/parkcontrol/state", handleParkControlState);
     _server->on("/parkcontrol/distances", handleDistances);
     _server->on("/parkcontrol/animationmode", handleAnimationMode);
+    _server->on("/halloween/spookymode/on", handleSpookyModeOn);
+    _server->on("/halloween/spookymode/off", handleSpookyModeOff);
     _server->begin();
 }
 
@@ -171,4 +175,16 @@ void ConfigRestApi::handleAnimationMode() {
             break;
     }
 
+}
+
+void ConfigRestApi::handleSpookyModeOn() {
+    Log.trace("Spooky mode on\n");
+    _halloweenState->spookyMode = true;
+    _server->send(200, "text/plain", "OK\nSpooky mode on");
+}
+
+void ConfigRestApi::handleSpookyModeOff() {
+    Log.trace("Spooky mode off\n");
+    _halloweenState->spookyMode = false;
+    _server->send(200, "text/plain", "OK\nSpooky mode off");
 }

@@ -7,9 +7,10 @@
 #include "../Animations/IStatefulAnimation.h"
 
 App::App() : state(ParkControlState(0)),
-        distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS),
+        //distance1(PIN_USOUND_TRIGGER_1, PIN_USOUND_ECHO_1, US_PERIOD_MILLIS, US_1_OFFSET_MILLIS),
         motionDetector(1000, 9.0),
-        timeOfLastMovementMillis(0)
+        timeOfLastMovementMillis(0),
+        halloweenState(false)
 {
     Serial.begin(115200);
     Log.begin(LOG_LEVEL_TRACE, &Serial);
@@ -26,7 +27,7 @@ void App::init() {
     files.start();
     network.start();
     config.load(files);
-    configRestApi.start(state, files);
+    configRestApi.start(state, halloweenState, files);
 
     leds = new CRGB[config.getNumLeds()];
 
@@ -38,9 +39,10 @@ void App::init() {
         renderer = new AnimationRenderer<CRGB>(*(animation), leds);
     } else if (config.getAnimationMode() == Config::HALLOWEEN) {
         HalloweenAnimationBuilder animationBuilder;
-        simpleAnimation = animationBuilder.getAnimation();
-        renderer = new AnimationRenderer<CRGB>(*(simpleAnimation), leds);
+        halloweenAnimation = animationBuilder.getStatefulAnimation(halloweenState);
+        renderer = new AnimationRenderer<CRGB>(*(halloweenAnimation), leds);
     }
+
     Log.trace("Initialization done\n");
 }
 
@@ -49,8 +51,8 @@ void App::loop() {
     unsigned int elapsedTime = appClock.getElapsedTimeMillisAndReset();
 
     if (config.getAnimationMode() == Config::PARK_CONTROL) {
-        distance1.measure(elapsedTime);
-        state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
+        //distance1.measure(elapsedTime);
+        //state.distanceCM = (unsigned int)distance1.getLastDistanceCM();
         motionDetector.sample(elapsedTime, state.distanceCM);
 
         Log.verbose("Motion detected: %s \n ", (motionDetector.isMovementDetected()) ? "true" : "false");

@@ -16,6 +16,7 @@
 #include "../Distances/PeriodicMeasurement.h"
 #include "../Distances/MotionDetector.h"
 #include "../Animations/IStatefulAnimation.h"
+#include "HalloweenState.h"
 
 const unsigned int US_PERIOD_MILLIS = 200;
 const unsigned int US_1_OFFSET_MILLIS = 10;
@@ -37,10 +38,11 @@ class App {
 
         AnimationRenderer<CRGB> *renderer;
         IStatefulAnimation<CRGB, ParkControlState> *animation;
-        IAnimation<CRGB> *simpleAnimation;
+        IStatefulAnimation<CRGB, HalloweenState> *halloweenAnimation;
         CRGB *leds;
+        HalloweenState halloweenState;
         
-        PeriodicMeasurement distance1;
+        //PeriodicMeasurement distance1;
         MotionDetector motionDetector;
 
         unsigned int timeOfLastMovementMillis;

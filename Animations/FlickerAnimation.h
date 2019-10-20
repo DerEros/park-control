@@ -12,6 +12,8 @@ class FlickerAnimation : public AbstractFrameBasedAnimation<CRGB> {
                 _palette(palette),
                 _flickerRate(flickerRate)
         {
+            // initial pixel setup
+            handleSwitchFrame();
         }
 
     private:

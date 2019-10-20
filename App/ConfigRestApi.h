@@ -2,13 +2,14 @@
 #define __CONFIG_REST_API_H__
 
 #include "ParkControlState.h"
+#include "HalloweenState.h"
 #include "Files.h"
 
 class ConfigRestApi {
     public:
         ConfigRestApi() {}
 
-        void start(ParkControlState &state, Files &files);
+        void start(ParkControlState &state, HalloweenState &halloweenState, Files &files);
         void loop();
 
     private:
@@ -22,5 +23,7 @@ class ConfigRestApi {
         static void handleDistances();
         static void handlePostingDistances();
         static void handleAnimationMode();
+        static void handleSpookyModeOn();
+        static void handleSpookyModeOff();
 };
 #endif

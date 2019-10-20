@@ -5,7 +5,8 @@
 
 #include "../libraries/FastLED/FastLED.h"
 
-#include "../Animations/IAnimation.h"
+#include "../Animations/IStatefulAnimation.h"
+#include "../App/HalloweenState.h"
 
 typedef CRGB Pixel;
 
@@ -13,7 +14,7 @@ class HalloweenAnimationBuilder {
     public:
         HalloweenAnimationBuilder() {}
 
-        IAnimation<Pixel>* getAnimation();
+        IStatefulAnimation<Pixel, HalloweenState>* getStatefulAnimation(HalloweenState& state);
     private:
 };
 
