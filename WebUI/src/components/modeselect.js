@@ -10,10 +10,15 @@ export default class ModeSelect {
     }
 
     handleMode1(event) {
-        console.log("Mode 1");
+        event.data.self.setAnimationMode(0);
     }
 
     handleMode2(event) {
-        console.log("Mode 2");
+        event.data.self.setAnimationMode(1);
+    }
+
+    setAnimationMode(mode) {
+        $.post("/parkcontrol/animationmode", JSON.stringify({"animationMode":mode}))
+            .fail(() => { alert("Upload of animation mode failed!"); });
     }
 }
