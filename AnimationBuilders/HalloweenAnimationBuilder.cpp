@@ -7,14 +7,16 @@
 
 DEFINE_GRADIENT_PALETTE(regularPaletteDef) {
     0,   0,   0,   0,
-    190, 255, 35,   5,
-    255, 228, 180, 6
+    138, 255, 0,   0,
+    178,  42,  17, 0,
+    255, 228, 151, 6
 };
 
 DEFINE_GRADIENT_PALETTE(spookyPaletteDef) {
-    0,   0,   0,   0,
-    137, 4, 129,   0,
-    255, 162, 3, 224 
+    0,     0,   0,   0,
+    137,   4, 129,   0,
+    196,   0,   6,   1,
+    255, 162,   3, 224 
 };
 
 IStatefulAnimation<Pixel, HalloweenState>* HalloweenAnimationBuilder::getStatefulAnimation(HalloweenState &state) {
@@ -28,7 +30,7 @@ IStatefulAnimation<Pixel, HalloweenState>* HalloweenAnimationBuilder::getStatefu
 
     Log.trace("Instantiating animation\n");
     IAnimation<Pixel> *regularFlickerAnimation = new FlickerAnimation(regularPalette, pixelRange, 20, 30);
-    IAnimation<Pixel> *spookyFlickerAnimation = new FlickerAnimation(spookyPalette, pixelRange, 20, 30);
+    IAnimation<Pixel> *spookyFlickerAnimation = new FlickerAnimation(spookyPalette, pixelRange, 40, 50);
 
     ConditionalAnimation<Pixel, HalloweenState>* halloweenAnimation =
         new ConditionalAnimation<Pixel, HalloweenState>(pixelRange, state);
